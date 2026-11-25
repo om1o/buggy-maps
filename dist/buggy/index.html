@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Explore Miami-Dade homes and schools, switch between street and aerial maps, and plan your school drive with Buggy.">
+  <title>Buggy Maps | Miami homes and schools</title>
+  <link rel="canonical" href="https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/">
+  <link rel="icon" type="image/png" href="./assets/buggy-icon.png">
+  <meta property="og:title" content="Buggy Maps · Miami homes and schools">
+  <meta property="og:description" content="Find Miami-Dade homes and schools, see campus and property imagery, plan a drive and check availability with Buggy.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/assets/buggy-share.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="./atlas.css">
+  <link rel="stylesheet" href="./listing-tour.css">
+  <link rel="stylesheet" href="./map-assets/leaflet.css">
+  <link rel="stylesheet" href="./map-engine.css">
+  <link rel="stylesheet" href="./map-experience.css">
+  <link rel="stylesheet" href="./ride-check.css">
+  <link rel="stylesheet" href="./trip-planner.css">
+  <link rel="stylesheet" href="./parent-actions.css">
+  <link rel="stylesheet" href="./explore-controls.css">
+  <link rel="stylesheet" href="./saved-places.css">
+  <link rel="stylesheet" href="./school-discovery.css">
+  <link rel="stylesheet" href="./journey-layout.css">
+  <link rel="modulepreload" href="./map-engine.js">
+  <link rel="modulepreload" href="./map-assets/home-overview.js">
+  <link rel="preload" href="./map-assets/miami.vmap" as="fetch" crossorigin="anonymous">
+</head>
+<body class="buggy-map-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="masthead">
+  <div class="wrap topbar">
+    <a href="./" class="identity" aria-label="Buggy Miami Maps"><img class="official-logo" src="./assets/buggy-logo.png" width="287" height="100" alt="Buggy"><span class="descriptor">Miami Maps</span></a>
+        <nav class="mode-controls" aria-label="Map mode">
+          <a href="./" data-mode="homes" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8M5.5 9.2V21h5v-6h3v6h5V9.2"/></svg><span>Homes</span></a>
+          <a href="?mode=schools" data-mode="schools"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m2 9 10-5 10 5-10 5-10-5Zm4 3v4c3 4 9 4 12 0v-4m3-2v7"/></svg><span>Schools</span></a>
+          <a href="?mode=route" data-mode="route"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17v-6a3 3 0 0 1 3-3h8m-4-4 4 4-4 4"/><circle cx="6" cy="18" r="2"/></svg><span>Directions</span></a>
+        </nav>
+    <nav class="atlas-navigation" aria-label="Main navigation">
+      <a class="header-directory-link" href="./#coverage-details">Sources</a>
+      <button type="button" id="open-saved" class="journey-saved" aria-haspopup="dialog" data-own-language>Saved</button>
+      <button class="language-button" id="choose-language" type="button" aria-label="Español" data-own-language>ES</button>
+      <a class="official-site" href="./booking/?to=website" target="_blank" rel="noopener">Buggy website</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <div class="wrap"><div id="offline-notice" class="notice" role="status" hidden>Offline. Showing saved map data where available.</div><div id="app-notice" class="notice" role="status" hidden></div></div>
+  <div id="home">
+    <section id="atlas-explorer" class="map-explorer" aria-label="Miami homes and schools map">
+      <div class="explorer-grid">
+        <div class="map-pane">
+          <div id="atlas-map" class="map-canvas" aria-label="Interactive map of Miami homes"></div>
+          <div class="map-search-dock">
+          <form id="search" class="search" role="search" autocomplete="off">
+            <label for="query" class="sr-only">Search by street address, ZIP code, MLS number, nearby school, subdivision or home features</label>
+            <div class="search-field">
+              <span class="magnifier" aria-hidden="true"></span>
+              <input type="search" id="query" enterkeyhint="search" placeholder="Search address, ZIP or neighborhood" spellcheck="false" maxlength="180" aria-describedby="search-help" aria-expanded="false" aria-controls="suggestions" aria-autocomplete="list" role="combobox">
+              <button id="clear-search" class="clear-search" type="button" aria-label="Clear search" hidden>×</button>
+              <button type="submit" class="submit-search" aria-label="Search properties">Search</button>
+            </div>
+            <ul id="suggestions" class="suggestions" role="listbox" hidden></ul>
+          </form>
+          <p id="search-help" class="sr-only">Address, neighborhood, school or home features.</p>
+            <p id="index-progress" class="index-progress" role="status">Loading Miami homes…</p>
+          </div>
+          <div class="map-area-actions" data-own-language>
+            <button type="button" id="search-area" hidden>Search this area</button>
+            <button type="button" id="reset-area" hidden>Clear area</button>
+          </div>
+          <div class="basemap-switch" aria-label="Map style" role="group">
+            <button data-layer="streets" aria-pressed="true" type="button"><i aria-hidden="true" class="street-swatch"></i><span>Street</span></button>
+            <button data-layer="aerial" aria-pressed="false" type="button"><i aria-hidden="true" class="aerial-swatch"></i><span>Aerial</span></button>
+          </div>
+        </div>
+        <aside id="map-sheet" class="map-sheet" tabindex="-1" data-expanded="false" aria-label="Map property information">
+          <button type="button" id="sheet-toggle" class="sheet-toggle" aria-expanded="false" aria-controls="journey-start map-card trip-panel"><span class="journey-grabber" aria-hidden="true"></span><span class="journey-toggle-text" aria-hidden="true">More details</span><span class="sr-only">Expand details</span></button>
+          <section id="journey-start" class="journey-start" data-own-language hidden>
+            <div class="journey-place"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 0 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Miami-Dade, Florida</span></div>
+            <h1 data-journey-key="title">Plan a school trip</h1>
+            <p class="journey-lede" data-journey-key="lede">Find your home, explore nearby schools and see the drive.</p>
+            <div class="journey-launch">
+              <button type="button" id="journey-find-home" class="journey-choice"><span class="journey-choice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.5 11.5 8.5-7 8.5 7m-15-1v9h5v-6h3v6h5v-9"/></svg></span><span data-journey-key="home">Find my home</span></button>
+              <a href="?mode=schools" class="journey-choice"><span class="journey-choice-icon school-choice-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m2 9 10-5 10 5-10 5L2 9Zm4 3v4c2 3 10 4 12 0v-4m3-2v6"/></svg></span><span data-journey-key="schools">Browse schools</span></a>
+            </div>
+            <div class="journey-feature">
+              <div class="journey-feature-head"><h2 data-journey-key="sample">Try a sample trip</h2></div>
+              <a class="journey-trip-card" href="?mode=schools&amp;school=fl-13-0841" data-sample-home="county-0141290000480" aria-labelledby="journey-sample-name journey-sample-cta">
+                <div class="journey-trip-photo"><img src="./media/exterior/douglas-3.webp" width="1157" height="866" alt="" decoding="async"><span class="journey-photo-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 19 5-7 5 6 3-4 3 5H4Z"/><circle cx="15.5" cy="7.5" r="2"/><rect x="2.5" y="3" width="19" height="18" rx="3"/></svg>Coconut Grove</span></div>
+                <span class="journey-trip-body"><strong id="journey-sample-name" data-journey-key="sampleTitle">Coconut Grove school drive</strong>
+                  <span class="journey-stops"><span>3744 Stewart Ave</span><span>Coconut Grove Elementary School</span></span>
+                  <span class="journey-trip-open" id="journey-sample-cta"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18v-5c0-2 1-3 3-3h7m-3-4 4 4-4 4"/><circle cx="6" cy="18" r="2"/></svg><span data-journey-key="open">Open directions</span></span>
+                </span>
+              </a>
+              <a class="journey-credit" href="https://commons.wikimedia.org/wiki/File:Marjory_Stoneman_Douglas_House_-_3.jpg" target="_blank" rel="noopener" data-journey-key="credit">House photo · National Park Service, 2013</a>
+            </div>
+            <a class="journey-galleries" href="?view=gallery&amp;layout=map"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="16" height="15" rx="3"/><path d="m6 15 4-4 3 3 2-2 4 4M2 7v11a3 3 0 0 0 3 3h12"/><circle cx="16" cy="8" r="1"/></svg><span data-journey-key="galleries">Browse homes with photo galleries</span></a>
+          </section>
+          <div id="map-card" class="map-card">
+            <div class="map-intro"><p class="map-overline">Miami property atlas</p><h1 class="map-heading">Explore Miami homes</h1><p class="map-subtitle">Tap a cluster to zoom in, then choose a home.</p></div>
+          </div>
+          <div id="trip-panel" class="map-card trip-panel" data-own-language hidden></div>
+        </aside>
+      </div>
+    </section>
+    <div class="wrap" id="overview-stats"><div class="collection-stats" aria-label="About the collection"><div><strong id="records-count">35,041</strong><span>searchable property records</span></div><div><strong id="aerial-count">35,036</strong><span>homes with aerial imagery</span></div><div><strong id="schools-count">1,190</strong><span>schools in the directory</span></div></div></div>
+    <div class="wrap">
+      <section class="directory" id="directory" aria-labelledby="directory-title" tabindex="-1">
+        <div class="section-top"><div><p class="eyebrow section-tag" id="collection-kicker">The collection</p><h2 id="directory-title">Explore Miami homes</h2><p id="directory-status" class="status" aria-live="polite"></p></div><a id="browse-all" class="line-action" href="?browse=all">Browse all homes</a></div>
+        <div id="results-toolbar" class="results-toolbar" hidden><nav id="view-filters" class="view-filters" aria-label="Filter properties by available imagery" hidden></nav><div class="result-tools"><label for="sort-order">Sort by</label><select id="sort-order"><option value="relevance">Recommended</option><option value="address">Address A–Z</option><option value="beds">Most bedrooms</option><option value="area">Largest living area</option></select></div></div>
+        <div id="cards" class="cards"><div class="skeleton-card" aria-hidden="true"><div></div><i></i><i></i></div><div class="skeleton-card" aria-hidden="true"><div></div><i></i><i></i></div><div class="skeleton-card" aria-hidden="true"><div></div><i></i><i></i></div></div>
+        <div id="results-actions" class="results-actions"></div>
+      </section>
+      <section class="ride-brand" aria-label="About Buggy school rides"><div class="ride-brand-film"><video id="buggy-film" width="960" height="540" muted playsinline preload="none" poster="./assets/buggy-arrival-poster.webp" aria-label="Blue-and-black Buggy van pulling up to a residential curb"></video></div><div><p class="map-overline">Buggy school transportation</p><h2>From home to school</h2><p>Choose a home on the map and enter a school to check whether Buggy has confirmed that ride.</p><a class="text-link" href="./booking/?to=website" target="_blank" rel="noopener">Visit Buggy school transportation ↗</a></div></section>
+      <details class="coverage-details" id="coverage-details">
+        <summary><span><strong>Your data, clearly explained.</strong><small>Coverage, sources and downloads</small></span><span class="disclosure-plus" aria-hidden="true">+</span></summary>
+        <div class="coverage-content"><div><p id="coverage-description">City of Miami single-family property records and the Miami-area listing archive.</p><p>Real county aerial photographs are centered on each property. Exterior views and drone galleries are available for verified matching homes.</p><p>Records and images are dated snapshots. School names in the archive don’t establish school assignment or Buggy service availability.</p><a class="text-link" href="https://gisweb.miamidade.gov/arcgis/rest/services/MD_SQLPictometry_Connect/MapServer/0" target="_blank" rel="noopener">View the county data source</a> · <a class="text-link" href="./data/school-sources.txt">School sources</a> · <a class="text-link" href="./data/school-image-credits.csv">School image credits</a></div><div class="download-options"><a href="./data/Miami-Dade-Schools.csv" download><span class="file-type">CSV</span><span><strong>School spreadsheet</strong><small>Schools, grades, contacts, photos and map links</small></span></a><a href="./data/schools.json" download><span class="file-type">JSON</span><span><strong>Miami-Dade school directory</strong><small>School records, map locations and image credits</small></span></a><a href="./data/Buggy_Miami_Properties.csv" download><span class="file-type">CSV</span><span><strong>All property rows</strong><small>Addresses, key facts and image links · 17 MB</small></span></a><a href="./data/Buggy_Property_Data.zip" download><span class="file-type">ZIP</span><span><strong>Detailed data collection</strong><small>Records, histories, source notes and image links · 14 MB</small></span></a><a class="report-link" href="../report/">Read the original research presentation</a><a class="report-link" id="map-implementation" href="./implementation/">View app source</a></div></div>
+      </details>
+    </div>
+  </div>
+  <div id="property" class="wrap property" hidden></div>
+  <noscript><div class="wrap notice"><p>JavaScript is needed for address search. You can still <a href="../report/">read the report and download the property data</a>.</p></div></noscript>
+</main>
+<footer class="site-footer"><div class="wrap foot-inner"><a href="./booking/?to=website" class="identity" aria-label="Visit Buggy school transportation"><img class="official-logo" src="./assets/buggy-logo.png" width="287" height="100" alt="Buggy"></a><p>A clearer view of Miami.</p><a href="./service/?view=operator">Operator sign-in</a><a href="../report/">Research &amp; sources</a></div></footer>
+<dialog id="saved-places-dialog" data-own-language></dialog>
+<dialog id="lightbox" aria-labelledby="lightlabel">
+  <div class="lighthead">
+    <div id="lightlabel"></div>
+    <button type="button" id="close-light" aria-label="Close image" autofocus>Close <span aria-hidden="true">×</span></button>
+  </div>
+  <div class="light-stage" id="light-stage"></div>
+  <div id="light-status"></div>
+  <div class="photo-toolbar">
+    <div id="light-caption" class="photo-caption" aria-live="polite" aria-atomic="true"></div>
+    <div id="light-nav"></div>
+  </div>
+  <div id="lightcredit" class="lightcredit"></div>
+</dialog>
+<article id="school-print" class="school-print">
+  <img src="./assets/buggy-logo.png" width="115" height="40" alt="Buggy">
+  <h1>Buggy Maps</h1><p>Miami-Dade school map</p><ul></ul>
+  <a href="https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/">https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/</a>
+</article>
+<script type="module" src="./parent-actions.js"></script>
+<script type="module" src="./journey-layout.js"></script>
+<script type="module" src="./atlas.js"></script>
+</body>
+</html>

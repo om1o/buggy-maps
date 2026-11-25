@@ -1,0 +1,53 @@
+.sp-launch, .sp-toggle {
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:42px;padding:7px 13px;border:1px solid #d6e0ed;border-radius:12px;
+  background:#fff;color:#183d6b;font:600 .875rem/1.25 var(--sans,system-ui,sans-serif);cursor:pointer;
+}
+.sp-launch:hover, .sp-toggle:hover {border-color:#8eafda;background:#f3f7fd}
+.sp-toggle[aria-pressed=true], .sp-launch[aria-expanded=true] {color:#0747a4;border-color:#adcaef;background:#eaf3ff}
+.sp-launch svg,.sp-toggle svg,.sp-empty svg {width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}
+.sp-toggle[aria-pressed=true] svg {fill:currentColor}
+.sp-count {font:700 .75rem/1 var(--sans,system-ui,sans-serif);border-radius:8px;background:#eaf1fc;color:#1a4a87;min-width:20px;padding:4px}
+.sp-count[hidden],.sp-toggle[hidden] {display:none}
+dialog.sp-dialog {
+  width:min(500px, calc(100% - 28px));max-width:calc(100% - 28px);max-height:min(82dvh,740px);
+  box-sizing:border-box;overflow:auto;overscroll-behavior:contain;margin:auto;padding:0;z-index:10;
+  color:#162d48;background:#fff;border:1px solid #d3dfeb;border-radius:22px;
+  box-shadow:0 24px 76px #0e29494a;font:400 1rem/1.45 var(--sans,system-ui,sans-serif);
+}
+dialog.sp-dialog::backdrop {background:rgb(14 34 59 / .35);backdrop-filter:blur(3px)}
+.sp-sheet {padding:20px 22px}
+.sp-head {display:flex;align-items:center;justify-content:space-between;gap:14px}
+.sp-title {margin:0;font:650 1.65rem/1.18 var(--sans,system-ui,sans-serif);letter-spacing:-.035em;color:#112c4f}
+.sp-close,.sp-remove,.sp-clear,.sp-filter,.sp-secondary,.sp-destructive {font:600 .875rem/1.3 var(--sans,system-ui,sans-serif);cursor:pointer}
+.sp-close {display:grid;place-items:center;width:44px;height:44px;padding:0;color:#39506b;border:0;border-radius:50%;background:#eef3f8;font-size:1.5rem;font-weight:400}
+.sp-note {margin:5px 0 14px;color:#53667a;font-size:.875rem;line-height:1.45}
+.sp-filters {display:flex;gap:4px;flex-wrap:wrap;margin:16px 0 10px}
+.sp-filter {min-height:40px;padding:8px 11px;border:1px solid transparent;border-radius:18px;color:#415871;background:#f1f5fa}
+.sp-filter[aria-pressed=true] {background:#153d6c;color:#fff}
+.sp-list {padding:0;margin:0;list-style:none}
+.sp-item {display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid #e4ebf3}
+.sp-place {display:flex;flex:1;min-width:0;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 3px;border-radius:6px;text-decoration:none;color:#172f4f}
+a.sp-place:hover .sp-name {color:#065ac7;text-decoration:underline}
+.sp-kind {color:#586c82;font-size:.8125rem;font-weight:550}
+.sp-name {font-size:1rem;font-weight:650;overflow-wrap:anywhere}
+.sp-place .sp-note {margin:1px 0}
+.sp-remove,.sp-clear {border:0;border-radius:8px;background:transparent;color:#8e3836;min-height:44px;padding:7px 8px}
+.sp-remove:hover,.sp-clear:hover {background:#fff3f1}
+.sp-empty {display:grid;justify-items:center;text-align:center;padding:25px 12px 19px}
+.sp-empty svg {width:37px;height:37px;color:#4773a0;stroke-width:1.25}
+.sp-empty-title {font-size:1rem;font-weight:650;margin:15px 0 0}
+.sp-empty .sp-note {max-width:32ch}
+.sp-foot {display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding-top:10px}
+.sp-confirm {width:100%;margin:0;color:#344a60;font-size:.9375rem;font-weight:600}
+.sp-secondary,.sp-destructive {min-height:42px;border-radius:10px;padding:8px 12px}
+.sp-secondary {color:#1f4772;background:#f1f6fc;border:1px solid #d3e0ef}
+.sp-destructive {background:#90342f;color:white;border:1px solid #90342f}
+.sp-sheet :is(a,button):focus-visible,.sp-launch:focus-visible,.sp-toggle:focus-visible {outline:3px solid #0967c8;outline-offset:2px}
+@media(max-width:540px) {
+  .sp-launch {min-height:42px;padding:7px}
+  .sp-sheet {padding:17px}
+  .sp-filter {padding-inline:9px}
+}
+@media(prefers-reduced-motion:no-preference) {dialog.sp-dialog[open]{animation:sp-open .15s ease-out}@keyframes sp-open {from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}}
+@media print {dialog.sp-dialog, .sp-toggle, .sp-launch {display:none!important}}

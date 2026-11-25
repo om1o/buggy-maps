@@ -1,0 +1,28 @@
+.listing-photo-tour {
+  margin-block: 1rem;
+  padding: .25rem 1rem;
+  border: 1px solid #d5dfeb;
+  border-radius: 16px;
+  background: white;
+}
+.listing-photo-tour summary {
+  min-height: 48px;
+  align-content: center;
+  cursor: pointer;
+  color: #075bc8;
+  font-weight: 650;
+}
+.listing-photo-tour p { margin: 0 0 .75rem; color: #586577; font-size: .875rem; }
+.listing-photo-tour iframe {
+  display: block;
+  width: 100%;
+  height: clamp(400px, 68vh, 680px);
+  border: 0;
+  margin: 0 0 .75rem;
+}
+@media (max-width: 600px) {
+  .listing-photo-tour { padding-inline: .625rem; }
+}
+@media (max-width: 600px) {
+  .view-filters { flex-wrap: wrap; justify-content: flex-start; }
+}

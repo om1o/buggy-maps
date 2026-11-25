@@ -1,0 +1,99 @@
+@import url('./map-assets/leaflet.css');
+
+.buggy-atlas-map {
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  overflow: hidden;
+  background: #e8ebe4;
+  color: #203750;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  outline-offset: -4px;
+  --map-ink: #193947;
+  --map-blue: #126ad6;
+}
+.buggy-atlas-map:focus-visible {outline: 3px solid #126ad6;}
+.buggy-atlas-map .leaflet-tile-container canvas {display:block;max-width:none!important;max-height:none!important;}
+.buggy-atlas-map .bm-marker {background:transparent;border:0;display:grid;place-items:center;cursor:pointer;}
+.bm-marker .bm-symbol {
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  transition:box-shadow .17s ease,background .17s ease,scale .17s ease;user-select:none;
+}
+.bm-marker .bm-cluster {
+  min-width:37px;height:28px;padding:0 9px;gap:4px;
+  color:#fff;background:#1768be;border:2px solid #fff;border-radius:20px;
+  box-shadow:0 1px 3px #1d3c5429,0 3px 7px #25476229;
+  font-size:11px;line-height:1;font-weight:750;letter-spacing:-.015em;font-variant-numeric:tabular-nums;
+}
+.bm-cluster i {width:4px;height:4px;border-radius:100%;background:#c4e3ff;flex:none;}
+.bm-marker .bm-home,.bm-marker .bm-selected {
+  width:28px;height:28px;color:white;background:#1768be;border:2.5px solid #fff;border-radius:50%;
+  box-shadow:0 1px 3px #234a6050,0 2px 6px #17365c3b;
+}
+.bm-symbol.bm-home:after,.bm-symbol.bm-selected:after {
+  content:"";position:absolute;left:50%;bottom:-5px;transform:translateX(-50%) rotate(45deg);
+  width:6px;height:6px;background:inherit;border-right:2px solid white;border-bottom:2px solid white;border-radius:0 0 2px 0;
+}
+.bm-symbol svg {width:17px;height:17px;display:block;pointer-events:none;}
+.bm-marker .bm-selected {
+  width:39px;height:39px;background:#085bc2;border:3px solid #fff;
+  box-shadow:0 0 0 6px #2789ec33,0 3px 10px #12406e5c;
+  animation:bm-selected-in .55s ease-out;
+}
+.bm-marker .bm-selected svg{width:22px;height:22px;}
+.bm-marker:focus-visible {outline:none;}
+.bm-marker:hover .bm-symbol,.bm-marker:focus-visible .bm-symbol {background:#074eaa;scale:1.1;box-shadow:0 0 0 3px #ffffffdf,0 0 0 5px #0860b3;}
+.bm-label {pointer-events:none!important;}
+.bm-label-text {
+  display:block;position:absolute;white-space:nowrap;transform:translate(-50%,-50%);
+  color:#475754;letter-spacing:.07em;font-weight:650;font-size:11px;
+  text-shadow:0 1px 2px #fffffff0,0 -1px 2px #fffffff0,1px 0 2px white,-1px 0 2px white;
+}
+.bm-label-city{font-size:clamp(16px,1.55vw,25px);letter-spacing:-.045em;color:#3c4c52;font-weight:700;}
+.bm-label-town{font-size:13px;letter-spacing:-.008em;color:#455b58;}
+.bm-label-district{font-size:10px;text-transform:uppercase;letter-spacing:.085em;color:#596359;}
+.bm-label-water{font:italic 500 17px Georgia,serif;letter-spacing:.055em;color:#548294;text-shadow:0 1px 1px #d8f0f5;}
+.bm-label-park{color:#658860;font:italic 600 15px Georgia,serif;}
+.bm-label-airport{max-width:75px;text-align:center;white-space:normal;font-size:10px;line-height:1.3;color:#637377;}
+.buggy-atlas-map .bm-controls {
+  margin:14px 14px 0 0;overflow:hidden;display:flex;flex-direction:column;
+  background:#fff;border:1px solid #25395620;border-radius:13px;box-shadow:0 3px 14px #16354726;
+}
+.buggy-atlas-map .bm-controls button {
+  display:grid;place-items:center;width:40px;height:40px;min-width:40px;padding:0;margin:0;background:white;
+  border:0;color:#29435a;cursor:pointer;line-height:1;border-radius:0;box-shadow:none;transform:none;
+}
+.buggy-atlas-map .bm-controls button+button{border-top:1px solid #e6ebef;}
+.buggy-atlas-map .bm-controls button>span{font:400 21px/1 Arial,sans-serif;transform:translateY(-.5px);}
+.buggy-atlas-map .bm-controls button>svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.65;stroke-linecap:round;}
+.buggy-atlas-map .bm-controls button:hover{background:#edf5ff;color:#0759b5;}
+.buggy-atlas-map .bm-controls button:focus-visible,.bm-address-popup button:focus-visible{outline:2px solid #0d65c7;outline-offset:-3px;}
+.buggy-atlas-map .bm-controls button:disabled{color:#93a0ac;cursor:default;}
+.buggy-atlas-map .leaflet-control-attribution{border-radius:4px 0 0 0;background:#fffffff2;color:#3f5667;font-size:9px;line-height:1.4;padding:2px 5px;}
+.buggy-atlas-map .leaflet-control-attribution a{color:#415668;text-decoration:none;}
+.buggy-atlas-map .leaflet-control-scale{margin:0 0 9px 11px;}
+.buggy-atlas-map .leaflet-control-scale-line{border:1px solid #5b6d76;border-top:0;background:#ffffffbb;color:#385263;border-radius:0;font-size:9px;line-height:1.2;}
+.buggy-atlas-map .bm-map-error{position:absolute;bottom:28px;left:12px;z-index:800;padding:6px 10px;border-radius:7px;background:#fff;font-size:12px;}
+.bm-map-error button{background:none;border:0;text-decoration:underline;cursor:pointer;color:#1263b2;}
+.bm-address-popup{min-width:140px;max-height:210px;overflow:auto;display:flex;flex-direction:column;align-items:stretch;padding:0 12px 0 0;}
+.bm-address-popup strong{font-size:12px;padding:6px 0 8px;}
+.bm-address-popup button{min-height:36px;background:#fff;border:0;border-top:1px solid #dce3eb;text-align:left;color:#164e8b;cursor:pointer;}
+@media(prefers-reduced-motion:no-preference){.bm-cartography-ready .leaflet-tile-pane{animation:bm-cartography-in .48s ease-out both;}}
+@keyframes bm-cartography-in{from{opacity:.38;}to{opacity:1;}}
+@keyframes bm-selected-in{0%{scale:.75;box-shadow:0 0 0 15px #2789ec55;}100%{scale:1;box-shadow:0 0 0 6px #2789ec33,0 3px 10px #12406e5c;}}
+@media(pointer:coarse){.buggy-atlas-map .bm-controls button{width:44px;height:44px;}}
+@media(prefers-reduced-motion:reduce){.buggy-atlas-map *{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+.buggy-atlas-map[data-mode="schools"] .bm-symbol.bm-cluster,
+.buggy-atlas-map[data-mode="schools"] .bm-symbol.bm-home,
+.buggy-atlas-map[data-mode="schools"] .bm-symbol.bm-selected {background:#4860a2;}
+.buggy-atlas-map[data-mode="schools"] .bm-cluster i {background:#d9ddff;}
+.buggy-atlas-map[data-basemap="aerial"] .bm-label-text {color:white;text-shadow:0 1px 3px #092235,1px 0 3px #092235,-1px 0 3px #092235;}
+.bm-trip-pin {display:grid;place-items:center;border:3px solid white;border-radius:50%;color:white;box-shadow:0 0 0 1px #132e514d,0 2px 8px #132e5159;}
+.bm-trip-home {background:#1269df;} .bm-trip-school {background:#4d5898;}
+.bm-trip-pin svg {width:19px;height:19px;}
+.bm-aerial-status {position:absolute;z-index:800;bottom:33px;left:10px;background:#fff;color:#17354f;padding:4px 8px;border-radius:5px;font-size:11px;max-width:80%;pointer-events:none;}
+
+.bm-compare-pin{box-sizing:border-box;border:3px solid #fff;border-radius:50%;color:#fff;display:grid;place-items:center;font:700 14px/1 system-ui,sans-serif;box-shadow:0 2px 6px #14253c5c;}
+.bm-compare-0{background:#075fbd}.bm-compare-1{background:#087c61}.bm-compare-2{background:#923e86}

@@ -1,0 +1,40 @@
+.ride-check {
+  padding: clamp(18px, 3vw, 26px);
+  background: #f4f8ff;
+  color: #172b46;
+  border: 1px solid #d6e4f6;
+  border-radius: 18px;
+  min-width: 0;
+  width: 100%;
+  text-align: left;
+}
+.ride-check .ride-check-title { margin: 0; color: #152a47; font-size: clamp(1.25rem, 2.25vw, 1.5rem); line-height: 1.2; letter-spacing: -.035em; }
+.ride-check-origin, .ride-check-intro { margin: .45rem 0 1rem; font-size: .9375rem; color: #465b71; }
+.ride-check-form { margin: 0; }
+.ride-check-label { display: block; font-weight: 650; font-size: .9rem; margin: 0 0 .375rem; }
+.ride-check-controls { display: flex; flex-wrap: wrap; gap: .5rem; }
+.ride-check .ride-check-input {
+  flex: 1 1 12rem; min-width: 0; max-width: 100%; min-height: 46px;
+  padding: .6rem .85rem; border: 1px solid #aebed0; border-radius: 10px;
+  background: #fff; color: #182d44; font: inherit; font-size: 1rem;
+}
+.ride-check-submit, .ride-check-contact {
+  display: inline-flex; align-items: center; justify-content: center; gap: .3rem;
+  min-height: 46px; padding: .6rem 1rem; border: 0; border-radius: 10px; background: #0759bc;
+  color: white; font: inherit; font-size: .925rem; font-weight: 650; text-decoration: none; cursor: pointer;
+}
+.ride-check-submit:disabled { opacity: .65; cursor: progress; }
+.ride-check-nearby { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .4rem; margin-top: .6rem; }
+.ride-check-nearby-label { color: #465b71; font-size: .825rem; margin-right: .25rem; }
+.ride-check-suggestion {
+  background: transparent; border: 0; padding: .45rem .35rem; color: #134e95; font: inherit;
+  font-size: .875rem; min-height: 44px; cursor: pointer; text-align: left; text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ride-check-result:not(:empty) { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #cbdaec; }
+.ride-check-result p { margin: .3rem 0 .65rem; color: #394f67; font-size: .925rem; }
+.ride-check-state { font-size: 1rem; color: #132b48; }
+.ride-check-draft summary { align-content: center; min-height: 44px; font-size: .9375rem; color: #124e98; cursor: pointer; font-weight: 650; }
+.ride-check-result .ride-check-message { white-space: pre-wrap; overflow-wrap: anywhere; padding: .7rem .85rem; background: white; border-radius: 8px; }
+.ride-check-hint { display: block; color: #465b71; margin: .4rem 0 0; font-size: .8125rem; }
+.ride-check :is(button,a,input,summary):focus-visible { outline: 3px solid #0759bc; outline-offset: 3px; }

@@ -1,0 +1,24 @@
+Buggy Miami street map
+
+Road, water and area-landmark boundaries are generalized from the U.S. Census Bureau's 2025 TIGER/Line shapefiles for Miami-Dade County, Florida. Source geography is NAD83. The bundled geometry uses quantized Web Mercator coordinates and does not require live tile-service requests.
+
+Roads: https://www2.census.gov/geo/tiger/TIGER2025/ROADS/tl_2025_12086_roads.zip
+Area water: https://www2.census.gov/geo/tiger/TIGER2025/AREAWATER/tl_2025_12086_areawater.zip
+Area landmarks: https://www2.census.gov/geo/tiger/TIGER2025/AREALM/tl_2025_12_arealm.zip
+
+U.S. federal government geography is public domain. Cartographic styling and label placement are by Buggy. Leaflet 1.9.4, Copyright (c) Vladimir Agafonkin and CloudMade, is distributed under the BSD 2-Clause license in leaflet-LICENSE.txt.
+
+Driving previews
+Miami-Dade County, Street Network. Publication 89fbd809c1e346c1b975d4cecc2fb5e3, retrieved November 23, 2026.
+https://www.arcgis.com/home/item.html?id=89fbd809c1e346c1b975d4cecc2fb5e3
+https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/StreetNetwork_gdb/FeatureServer/0
+https://gisweb.miamidade.gov/GISSelfServices/Data/HTML/StreetMaint.htm
+miami-drive.rnet stores the primary connected network of 85,542 posted public road segments and 61,208 junctions. Geometry is generalized to approximately 3 meters. Endpoint elevations preserve grade separation. County class 0–5 roads with identified public maintainers CO, CI, CC, CM or SR are eligible. Directional costs use FT/TF_Mins and distance uses FT/TF_Miles; impassable directions are excluded. Parcel and campus points snap onto ordinary public roads within 400 meters. Drive time is a no-traffic estimate. Specific entrances, turn prohibitions, current closures, school loading, stops, and actual Buggy service remain unverified.
+
+Aerial basemap
+Miami-Dade County GIS Groups. Georeferenced county aerial imagery, downloaded November 23, 2026.
+https://gisweb.miamidade.gov/arcgis/rest/services/MapCache/MDCImagery_WebMercator/MapServer
+miami-aerial-overview.webp is a resized county raster export of the urban county and surrounding area. At detailed scales, live ArcGIS exports request exact EPSG:3857 tile bounding boxes from the same service. Capture dates depend on location.
+
+Opening home clusters
+home-overview.js is generated from the local property index and matched gallery-home supplement by scripts/build-map-overview.mjs. Every disclosed, mapped record contributes at each of three opening scales. Duplicates in the supplement are excluded by property ID and county folio. Selecting a cluster fits its actual property bounds. Individual markers resolve to the same row IDs as the complete home index.
