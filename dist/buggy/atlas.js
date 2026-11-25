@@ -1,7 +1,7 @@
 import { setupLanguage, withLanguage, currentLanguage } from './language.js';
 import { currentMapParams, publicMapParams, setMapHref, intentForMapLink, writeMapLocation, replaceMapLocation, protectIncomingMapLocation } from './trip-location.js';
 import { createExploreModes } from './explore-modes.js';
-import { normalize, indexRow, exactStreet, hasPhotoGallery, wantsCounty, countyAddress, parseSearch, findProperties, priceSearchNote, placeMatchLabel } from './search.js';
+import { normalize, indexRow, exactStreet, unambiguousHome, hasPhotoGallery, wantsCounty, countyAddress, parseSearch, findProperties, priceSearchNote, placeMatchLabel } from './search.js';
 import { makeMapExperience, initBrandFilm } from './map-experience.js';
 import { mountRideCheck } from './ride-check.js';
 import { mixedPlaceResults, exactSchool } from './place-search.js';
@@ -168,7 +168,12 @@ byId("search").addEventListener("submit",e=>{
   clearSuggestions();
   const found=rowsInArea(model.ready?matching(text,true):[],parseArea(p.get('area')));
   const exact=found.filter(row=>exactStreet(row,text)||normalized===row._mlsKey||normalized===row._idKey);
-  if(exact.length===1&&text){openProperty(exact[0].id,true);return;}
+  if(exact.length===1&&text){
+    const row=exact[0];
+    if(normalized===row._mlsKey || normalized===row._idKey || unambiguousHome(found,text)){
+      openProperty(row.id,true);return;
+    }
+  }
   const schools=mobility.schoolMatches(text),campus=exactSchool(schools,text);
   if(campus){mobility.schoolPin(campus);return;}
   if(mobility.current()==="schools" || text && schools.length && !found.length && !wantsCounty(text)){

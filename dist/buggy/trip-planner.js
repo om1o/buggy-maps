@@ -4,6 +4,7 @@ import {confirmParentAction, parentBookingURL} from './parent-actions.js';
 import {districtSchoolLocator} from './school-discovery.js';
 import {savedButton} from './saved-places.js';
 import {publicSharing, publicMapURL} from './share-link.js';
+import {unambiguousHome} from './search.js';
 
 const groveSchoolId = 'fl-13-0841';
 const mapBase = new URL('./', import.meta.url);
@@ -30,6 +31,7 @@ const copy = {
     oneCompared: 'Select View drive for directions, or add another school to compare.',
     severalCompared: 'Select View drive next to a school for its directions and arrival planner.',
     homeHelp: 'Enter at least two characters.', notFound: 'No matches. Try a street name, school name, or ZIP.',
+    chooseHome: 'Several homes match. Choose an address or add a unit, direction, or ZIP code.',
     noLookup: 'Search is unavailable. Try again.', browse: 'Find a route', distance: 'Road distance',
     driveTime: 'Estimated car drive', approximate: 'Car time uses mapped streets and excludes traffic, parking and school drop-off lines. Buggy confirms its own pickup time.',
     unknownRoute: 'An in-app driving route is unavailable for this pair. Try a directions link below.',
@@ -64,6 +66,7 @@ const copy = {
     oneCompared: 'Pulsa Ver trayecto para ver las indicaciones o añade otra escuela para comparar.',
     severalCompared: 'Pulsa Ver trayecto junto a una escuela para ver las indicaciones y planear la llegada.',
     homeHelp: 'Escribe al menos dos caracteres.', notFound: 'Sin resultados. Prueba con una calle, escuela o código postal.',
+    chooseHome: 'Hay varias viviendas. Elige una dirección o añade el apartamento, el punto cardinal o el código postal.',
     noLookup: 'La búsqueda no está disponible. Inténtalo de nuevo.', browse: 'Planear una ruta', distance: 'Distancia por carretera',
     driveTime: 'Tiempo estimado en auto', approximate: 'El tiempo en auto se calcula con las calles del mapa. El tráfico, el estacionamiento y la fila escolar requieren tiempo adicional. Buggy confirma la hora de recogida.',
     unknownRoute: 'No hay vista previa de esta ruta. Prueba con una de las aplicaciones de mapas.',
@@ -346,17 +349,17 @@ export function createTripPlanner(options) {
       const choice=ul.children[index];
       if(choice) {input.setAttribute('aria-activedescendant',choice.id); choice.scrollIntoView({block:'nearest'});}
     }
-    async function search() {
+    async function search(onResults) {
       close();
       const v=version,term=input.value.trim();
       if(isHome && term.length<2) return;
       try {
         const rows=await (isHome?getHomes(term):getSchools(term));
         if(v!==version||signal.aborted||!field.isConnected)return;
-        matches=(Array.isArray(rows)?rows:[]).filter(item=>item && !item.withheld && (isHome?item.address:item.name && physicalSchool(item))).slice(0,6);
+        matches=(Array.isArray(rows)?rows:[]).filter(item=>item && !item.withheld && (isHome?item.address:item.name && physicalSchool(item)));
         if(!matches.length){feedback.textContent=t.notFound; feedback.hidden=false;return;}
         ul.replaceChildren();
-        matches.forEach((item,i)=>{
+        matches.slice(0,6).forEach((item,i)=>{
           const li=make('li','tp-option'); li.id=ul.id+'-'+i; li.setAttribute('role','option');li.setAttribute('aria-selected','false');
           li.append(make('strong','',isHome?item.address:item.name),make('small','',isHome?locality(item):schoolAddress(item)));
           li.addEventListener('pointerdown', e=>e.preventDefault());
@@ -366,12 +369,18 @@ export function createTripPlanner(options) {
         ul.hidden=false;input.setAttribute('aria-expanded','true');
       } catch {
         if(v!==version || signal.aborted)return;
-        feedback.textContent=t.noLookup;feedback.hidden=false;
+        feedback.textContent=t.noLookup;feedback.hidden=false;return;
       }
+      onResults?.();
     }
     function pick(item) {
       editing=null;close(); focusKind=(isHome&&!state.school)?'school':(!isHome&&!state.home)?'home':'';
       go('route',{[kind]:item.id});
+    }
+    function submitChoice() {
+      const item=selected>=0?matches[selected]:isHome?unambiguousHome(matches,input.value):matches[0];
+      if(item) {pick(item);return;}
+      feedback.textContent=t.chooseHome;feedback.hidden=false;
     }
     function queue(){close();timer=setTimeout(search,130);}
     input.addEventListener('input',queue);
@@ -379,16 +388,20 @@ export function createTripPlanner(options) {
     // Keep the sheet still between pointer-down and click on options outside the field.
     input.addEventListener('blur',()=>{clearTimeout(timer);timer=setTimeout(close,200);});
     input.addEventListener('keydown',e=>{
+      if(e.isComposing)return;
       if(e.key==='Escape'){e.preventDefault();close();restore();return;}
       if(e.key==='ArrowDown'||e.key==='ArrowUp'){
         e.preventDefault();
-        if(ul.hidden) {search().then(()=>{if(matches.length) highlight(e.key==='ArrowDown'?0:matches.length-1);});return;}
-        highlight((selected+(e.key==='ArrowDown'?1:-1)+matches.length)%matches.length);
+        const move=()=>{
+          const n=ul.children.length;
+          const next=e.key==='ArrowDown'?selected+1:selected<0?n-1:selected-1;
+          highlight((next+n)%n);
+        };
+        if(ul.hidden)search(move);else move();
       }
       if(e.key==='Enter'){
         e.preventDefault();
-        if(matches.length){pick(matches[selected<0?0:selected]);return;}
-        search().then(()=>{if(matches.length && !signal.aborted)pick(matches[0]);});
+        if(matches.length)submitChoice();else search(submitChoice);
       }
     });
     signal.addEventListener('abort',close,{once:true});

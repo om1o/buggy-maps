@@ -264,6 +264,17 @@ function score(row,plan,committed) {
   return Math.max(base>=0?base+2:-1,withPlace);
 }
 
+// A complete address can outrank a longer house number. Another matching unit,
+// directional variant, or duplicate address still needs an explicit choice.
+export function unambiguousHome(rows,text) {
+  if(rows.length<=1)return rows[0];
+  const plan=parseSearch(text);
+  if(!plan.street)return null;
+  const exact=rows.find(row=>exactStreet(row,text));
+  if(!exact || rows.some(row=>row!==exact && score(row,plan,true)>=0))return null;
+  return exact;
+}
+
 export function findProperties(rows,media,term,committed=false) {
   const plan=typeof term==='string'?parseSearch(term):term;
   if(!plan.text || !plan.all && !plan.words.length && !plan.zips.length && !plan.media.length && !plan.limits.length && !plan.event && !plan.city) return [];
