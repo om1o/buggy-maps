@@ -29,6 +29,7 @@ export function createSchoolDirectory(loadDirectory = () => loadJSON('data/schoo
   function search(value='') {
     if(!value.trim()) return list;
     const raw=norm(value), words=toWords(value);
+    if(!raw)return [];
     if(!words.length)return list;
     const ranked=[];
     for(const school of list) {

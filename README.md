@@ -2,6 +2,12 @@
 
 Plan a Miami-Dade school drive, compare campuses, calculate a departure time, and share schools in English or Spanish. When multiple homes match a search, use the arrow keys and Enter, or tap the intended address. Buggy confirms ride availability and fares on its own site.
 
+[Open the map](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/) · [Prepare a client brief](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/client-brief.html) · [Connect an AI agent](docs/AI-AGENTS.md#connect-an-mcp-client)
+
+## Get the data
+
+Download school records, property rows, source snapshots, street geometry and the driving graph without signing in. The catalog provides paths for both the website and raw GitHub downloads. The full repository includes the map and its published data. Each source retains its own terms and credits. [Dataset catalog](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/agent-tools.json) · [School directory JSON](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/schools.json) · [Property coverage](dist/buggy/data/coverage.json) · [Download everything](https://github.com/om1o/buggy-maps/archive/refs/heads/main.zip)
+
 ## Run the map
 
 Clone this repository or extract the entire portable ZIP. On Windows, double-click **Start Buggy Maps.cmd**. On other platforms run `python run.py`. The launcher requires Python 3.8 or newer and opens the map in a browser. Press Ctrl+C in the terminal to stop.

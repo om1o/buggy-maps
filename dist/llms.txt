@@ -1,0 +1,20 @@
+# Buggy Maps
+
+> Miami-Dade school and Miami-area property snapshots, with local read-only tools for comparing campuses and building bilingual family briefs.
+
+## Start here
+
+- [Public dataset catalog and tool descriptor](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-tools.json)
+- [Agent guide and MCP setup](https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md)
+- [GitHub repository](https://github.com/om1o/buggy-maps)
+- [Full repository file index](https://api.github.com/repos/om1o/buggy-maps/git/trees/main?recursive=1)
+
+## Data
+
+- [School directory JSON](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/schools.json)
+- [Property coverage and snapshot date](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/coverage.json)
+- [All property rows, CSV](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/Buggy_Miami_Properties.csv)
+- [School directory sources](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/school-sources.txt)
+- [Geography, routing and imagery sources](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/map-assets/SOURCES.txt)
+
+The catalog links the property archive, original source snapshots, map geometry and driving graph. For browser apps on other origins, fetch file paths from the catalog's rawBaseUrl. Preserve the source-specific terms and credits for each asset.

@@ -43,6 +43,10 @@ try {
   assert.equal(all.schools.length, 8);
   for (const school of all.schools) assert.deepEqual(Object.keys(school).sort(), schema.$defs.school.required.toSorted());
   assert.deepEqual(run(['search', '--query', 'Absent Terminology']).schools, []);
+  for (const query of ['!!!', '— 🚲']) {
+    assert.deepEqual(run(['search', '--query', query]).schools, []);
+  }
+  assert.equal(run(['search', '--query', 'Académia Ejémplo']).schools[0].id, catalog[1].id);
   const spanish = run(['search', '--query', 'Academia Ejemplo', '--language', 'es', '--limit', '1']);
   assert.equal(spanish.language, 'es');
   assert.equal(spanish.schools[0].id, catalog[1].id);

@@ -23,8 +23,15 @@
     "failure": {"exitCode": 1, "stream": "stderr", "response": "#/$defs/errorResult"}
   },
   "x-web": {
+    "repository": "https://github.com/om1o/buggy-maps",
+    "agentGuide": "https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md",
+    "rawBaseUrl": "https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/",
+    "repositoryFileIndex": "https://api.github.com/repos/om1o/buggy-maps/git/trees/main?recursive=1",
+    "repositoryDownload": "https://github.com/om1o/buggy-maps/archive/refs/heads/main.zip",
     "dataDownloadsRelativeToDescriptor": {
       "coverage": "data/coverage.json",
+      "propertyIndex": "data/index.json",
+      "placeSearch": "data/search-places.json",
       "allPropertyRows": "data/Buggy_Miami_Properties.csv",
       "fullPropertyCollection": "data/Buggy_Property_Data.zip",
       "sourceSnapshots": "data/Buggy_Map_Source_Snapshots.zip",
@@ -32,6 +39,10 @@
       "schoolSpreadsheet": "data/Miami-Dade-Schools.csv",
       "schoolSources": "data/school-sources.txt",
       "schoolImageCredits": "data/school-image-credits.csv",
+      "propertyImageSources": "data/image-sources.csv",
+      "listingTours": "data/listing-tours.csv",
+      "streetMap": "map-assets/miami.vmap",
+      "drivingGraph": "map-assets/miami-drive.rnet",
       "mapAndRoutingSources": "map-assets/SOURCES.txt",
       "researchArchive": "../report/"
     },
@@ -44,6 +55,13 @@
     "singleExample": "https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/?mode=schools&school=fl-13-0841",
     "multipleExample": "https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/?mode=schools&campuses=fl-13-0841%2Cfl-13-6741&lang=es",
     "districtLocator": "https://app.guidek12.com/miami/school_search/current/"
+  },
+  "x-mcp": {
+    "transport": "stdio",
+    "setupGuide": "https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md#connect-an-mcp-client",
+    "installFromRepositoryRoot": "npm ci --prefix integrations/mcp",
+    "entryPointRelativeToRepository": "integrations/mcp/server.mjs",
+    "tools": ["list_map_datasets", "search_schools", "build_school_brief"]
   },
   "$defs": {
     "language": {"type": "string", "enum": ["en", "es"], "default": "en"},
