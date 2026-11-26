@@ -8,7 +8,7 @@ Clone this repository or extract the entire portable ZIP. On Windows, double-cli
 
 The `dist/` directory contains the published map, property records, school directory, local imagery, routing graph and linked research archive. File-level credits accompany the school and map assets. Publisher-hosted tours and optional external services keep their original links.
 
-The source snapshot download includes the eight original data inputs and the county acquisition notes. [Download the source snapshots](dist/buggy/data/Buggy_Map_Source_Snapshots.zip)
+The source snapshot index lists the eight original data inputs and the county acquisition notes. Each entry gives its map-relative path, archive member when applicable, byte length and SHA-256. The supplemental download includes the five inputs unique to that archive. The county snapshot and manifest are in the full property download. The aerial verification record accompanies the county tiles. [Download the source index and supplemental files](dist/buggy/data/Buggy_Map_Source_Snapshots.zip)
 
 ## Prepare a client school brief
 
