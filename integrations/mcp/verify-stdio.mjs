@@ -6,7 +6,8 @@ import {Client} from '@modelcontextprotocol/client';
 import {StdioClientTransport} from '@modelcontextprotocol/client/stdio';
 
 const app = new URL('../../dist/buggy/', import.meta.url);
-const web = JSON.parse(await readFile(new URL('agent-tools.json', app), 'utf8'))['x-web'];
+const descriptor = JSON.parse(await readFile(new URL('agent-tools.json', app), 'utf8'));
+const web = descriptor['x-web'];
 const server = fileURLToPath(new URL('server.mjs', import.meta.url));
 const client = new Client({name: 'buggy-maps-stdio-test', version: '1.0.0'});
 const transport = new StdioClientTransport({command: process.execPath, args: [server], cwd: tmpdir()});
@@ -33,7 +34,7 @@ async function expectError(name, args) {
 try {
   await client.connect(transport);
   const {tools} = await client.listTools();
-  assert.deepEqual(tools.map(t => t.name).sort(), ['build_school_brief', 'list_map_datasets', 'search_schools']);
+  assert.deepEqual(tools.map(t => t.name).sort(), descriptor['x-mcp'].tools.toSorted());
   for (const tool of tools) {
     assert.equal(tool.annotations.readOnlyHint, true);
     assert.equal(tool.inputSchema.type, 'object');
@@ -66,6 +67,10 @@ try {
   assert.deepEqual((await call('search_schools', {query: 'AbsentCampusForTesting'})).schools, []);
   assert.equal((await call('search_schools', {query: '33133', limit: 1})).schools.length, 1);
   assert.equal((await call('build_school_brief', {schoolIds: [grove]})).shareUrl, web.singleExample);
+  const {homes} = await call('search_homes', {zip: '33135', minPrice: 349000, maxPrice: 349000});
+  assert.deepEqual(homes.map(home => home.id), ['zillow-43838862']);
+  const nearby = await call('compare_nearby_schools', {homeIds: [homes[0].id], limit: 1});
+  assert.equal(nearby.comparisons[0].schools[0].id, 'fl-private-13-6697');
   await expectError('build_school_brief', {schoolIds: ['fl-13-9999']});
   await expectError('build_school_brief', {schoolIds: [grove, grove]});
   await expectError('build_school_brief', {schoolIds: []});

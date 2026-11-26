@@ -4,7 +4,7 @@ Plan a Miami-Dade school drive, compare campuses, calculate a departure time, an
 
 [Open the map](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/) · [Prepare a client brief](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/client-brief.html) · [Connect an AI agent](docs/AI-AGENTS.md#connect-an-mcp-client)
 
-Connect an AI client to the live **Streamable HTTP** endpoint to list map datasets, find a campus, or create a school brief. Authentication is **None**. [Copy the URL and try the tools](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-connect.html) · [Public MCP endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp)
+Connect an AI client to the live **Streamable HTTP** endpoint to find homes by archived asking price and ZIP, compare nearby campuses for up to three homes, or create a school brief. Authentication is **None**. [Copy the URL and try the tools](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-connect.html) · [Public MCP endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp)
 
 ## Get the data
 

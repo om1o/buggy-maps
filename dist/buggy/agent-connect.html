@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="referrer" content="no-referrer">
   <title>Connect an AI agent | Buggy Maps</title>
-  <meta name="description" content="Connect an AI client to Buggy Maps without an account. Try its public map data, Miami-Dade campus search and bilingual school briefs.">
+  <meta name="description" content="Connect an AI client to Buggy Maps. Search archived Miami-Dade home prices, compare nearby schools and build a school brief.">
   <link rel="icon" href="./assets/buggy-icon.png">
   <link rel="stylesheet" href="./client-brief.css">
   <link rel="stylesheet" href="./agent-connect.css">
@@ -21,7 +21,7 @@
   <main id="connect" class="wrap connect-main" tabindex="-1">
     <div class="intro">
       <h1 data-word="title">Connect an AI agent</h1>
-      <p data-word="intro">Give your assistant access to public Miami-Dade school records and map datasets through the Model Context Protocol (MCP).</p>
+      <p data-word="intro">Give your assistant access to archived Miami-Dade home prices, school records and map datasets through the Model Context Protocol (MCP).</p>
     </div>
     <div class="connect-grid">
       <section class="connect-panel" aria-labelledby="server-title">
@@ -46,6 +46,17 @@
         <div id="sample-brief" hidden></div>
       </section>
     </div>
+    <section class="home-workflow" aria-labelledby="home-title">
+      <h2 id="home-title" data-word="homes">Compare homes and nearby schools</h2>
+      <p data-word="homeIntro">Search by ZIP and maximum asking price. Compare the three closest mapped schools for each of the two lowest-priced matches.</p>
+      <form id="home-form">
+        <label for="home-zip"><span data-word="zip">ZIP code</span><input id="home-zip" type="text" value="33133" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required></label>
+        <label for="home-max"><span data-word="max">Maximum asking price (USD)</span><input id="home-max" type="number" value="950000" min="0" step="0.01" inputmode="decimal" required></label>
+        <button type="submit" id="home-run" disabled data-word="compare">Compare first two homes</button>
+      </form>
+      <p class="status" role="status" id="home-status"></p>
+      <div id="home-results"></div>
+    </section>
   </main>
 </body>
 </html>

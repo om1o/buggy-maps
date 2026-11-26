@@ -1,6 +1,6 @@
 # Use Buggy Maps with an AI agent
 
-The public snapshot covers Miami-area properties and Miami-Dade schools. A web client can download the data directly. An MCP client can list the datasets, search schools and generate shareable briefs. Both routes work without a Buggy Maps or GitHub account. [Public map](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/) · [Data catalog](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-tools.json)
+The public snapshot covers Miami-area properties and Miami-Dade schools. A web client can download the data directly. An MCP client can search archived home asking prices, compare nearby campuses, list datasets, find schools and generate shareable briefs. Both routes work without a Buggy Maps or GitHub account. [Public map](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/) · [Data catalog](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-tools.json)
 
 ## Download the map data
 
@@ -23,8 +23,16 @@ The live map's connection page copies the URL and lets you try the tools in your
 | `list_map_datasets` | `{}` | Download and attribution links for each published dataset |
 | `search_schools` | `{"query":"Coconut Grove Elementary","limit":3}` | Matching campuses with directory IDs |
 | `build_school_brief` | `{"schoolIds":["fl-13-0841"],"language":"es"}` | Campus facts and a Spanish school-only map link |
+| `search_homes` | `{"zip":"33133","minPrice":500000,"maxPrice":950000,"limit":2}` | Matching home IDs, addresses, dated asking prices and source links |
+| `compare_nearby_schools` | `{"homeIds":["zillow-43858419","zillow-43858118"],"limit":3}` | The closest mapped campuses for each home, with grade ranges, school types, sources and straight-line miles |
 
-To verify a deployment using the official JavaScript MCP client, run `npm ci --prefix integrations/mcp` in a checkout, then `node integrations/mcp/verify-http.mjs https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp`. The test checks all three tools, both brief languages and rejection of an unknown campus ID. The hosted entry point imports the same directory and tool definitions as the local server. [Edge Function entry point](../supabase/functions/buggy-maps-mcp/index.ts)
+Give `search_homes` a five-digit ZIP, a minimum price, a maximum price, or a combination. Both price bounds are inclusive USD amounts. Results are ordered by price, then ID. The response includes the total match count. Use `limit` (1–20) and `offset` to page through it. Each price has an observation date and a listing source for a current availability check.
+
+Pass one to three IDs from your search to `compare_nearby_schools`. It returns up to five physical campuses per home, preserving the home order. Distance is an approximate straight line from the mapped home location. Confirm attendance boundaries with the district and enrollment with the school. [District locator](https://app.guidek12.com/miami/school_search/current/)
+
+This release includes 1,661 disclosed individual homes classified as single-family in the source, with asking prices observed from March 6 through November 15, 2026. Sale prices, county assessments and builder-community plans are excluded. Rebuild the search snapshot from the repository's published property records with `node integrations/mcp/build-property-snapshot.mjs`. [Search snapshot on GitHub](../integrations/mcp/property-snapshot.json) · [Download the same snapshot from the map, gzipped JSON](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/data/archived-asking-homes.json.gz)
+
+To verify a deployment using the official JavaScript MCP client, run `npm ci --prefix integrations/mcp` in a checkout, then `node integrations/mcp/verify-http.mjs https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp`. The test exercises all five tools, including searching by a price range and passing the returned IDs to a school comparison. [Edge Function entry point](../supabase/functions/buggy-maps-mcp/index.ts)
 
 ## Run the MCP server locally
 

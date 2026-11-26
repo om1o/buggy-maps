@@ -39,7 +39,30 @@ try {
   }
   const invalid = await client.callTool({name: 'build_school_brief', arguments: {schoolIds: ['fl-13-9999']}});
   assert.equal(invalid.isError, true);
-  console.log(`Anonymous HTTP client passed all three tools, ${datasets.length} catalog entries, EN/ES briefs and unknown-ID rejection.`);
+  const query = {zip: '33133', minPrice: 500000, maxPrice: 950000, limit: 2};
+  const matches = await call('search_homes', query);
+  assert.equal(matches.totalMatches, 11);
+  assert.equal(matches.priceBasis, 'archived_asking_usd');
+  assert.deepEqual(matches.homes.map(h => [h.id, h.askingPriceUsd, h.observedOn, h.zip]), [
+    ['zillow-43858419', 679990, '2026-03-06', '33133'], ['zillow-43858118', 695000, '2026-03-06', '33133']
+  ]);
+  for (const h of matches.homes) {
+    assert.equal(h.currentAvailability, 'unverified');
+    assert.equal(new URL(h.sourceUrl).protocol, 'https:');
+  }
+  const compared = await call('compare_nearby_schools', {homeIds: matches.homes.map(h => h.id), limit: 2});
+  assert.equal(compared.distanceBasis, 'straight_line_miles');
+  assert.equal(compared.attendanceAssignment, 'unverified');
+  assert.equal(compared.districtLocator, descriptor['x-web'].districtLocator);
+  assert.deepEqual(compared.comparisons.map(c => [c.home.id, c.schools[0].id, c.schools[0].distanceMiles]), [
+    ['zillow-43858419', 'fl-private-13-9306', 0.36], ['zillow-43858118', 'fl-13-5041', 0.22]
+  ]);
+  assert.deepEqual((await call('search_homes', {zip: '33135', maxPrice: 348999})).homes, []);
+  for (const [name, args] of [['search_homes', {}], ['search_homes', {minPrice: 2, maxPrice: 1}],
+    ['compare_nearby_schools', {homeIds: ['unknown-home']} ]]) {
+    assert.equal((await client.callTool({name, arguments: args})).isError, true);
+  }
+  console.log(`Anonymous HTTP client passed all five tools, ${datasets.length} catalog entries, dated asking-price search, campus distance comparisons, EN/ES briefs and invalid-input checks.`);
 } finally {
   await client.close();
 }

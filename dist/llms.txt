@@ -1,10 +1,10 @@
 # Buggy Maps
 
-> Miami-Dade school and Miami-area property snapshots, with anonymous remote MCP tools for comparing campuses and building bilingual family briefs.
+> Miami-Dade school and Miami-area property snapshots, with anonymous remote MCP tools for finding homes by archived asking price and ZIP, comparing nearby campuses and building bilingual family briefs.
 
 ## Start here
 
-- [Public MCP endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp) — Streamable HTTP, no credentials. Use tools/list to discover list_map_datasets, search_schools and build_school_brief.
+- [Public MCP endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp) — Streamable HTTP, no credentials. Use tools/list to discover search_homes, compare_nearby_schools, list_map_datasets, search_schools and build_school_brief.
 - [Connect or try the tools on the live map](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-connect.html)
 - [Public dataset catalog and tool descriptor](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-tools.json)
 - [Agent guide and MCP setup](https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md)
@@ -16,6 +16,7 @@
 - [School directory JSON](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/schools.json)
 - [Property coverage and snapshot date](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/coverage.json)
 - [All property rows, CSV](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/Buggy_Miami_Properties.csv)
+- [Homes with documented archived asking prices, gzipped JSON](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/data/archived-asking-homes.json.gz)
 - [School directory sources](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/school-sources.txt)
 - [Geography, routing and imagery sources](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/map-assets/SOURCES.txt)
 

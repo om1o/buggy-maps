@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Buggy Maps school tools",
-  "description": "Logical inputs to two local CLI commands. Each command reads a school directory snapshot. A successful command prints one JSON object.",
+  "title": "Buggy Maps home and school tools",
+  "description": "x-mcp describes the public MCP service for home search, nearby campus comparisons and school briefs. The JSON Schema inputs below describe the two local school CLI commands.",
   "oneOf": [
     {"$ref": "#/$defs/searchInput"},
     {"$ref": "#/$defs/briefInput"}
@@ -33,6 +33,7 @@
       "propertyIndex": "data/index.json",
       "placeSearch": "data/search-places.json",
       "allPropertyRows": "data/Buggy_Miami_Properties.csv",
+      "archivedAskingHomes": "data/archived-asking-homes.json.gz",
       "fullPropertyCollection": "data/Buggy_Property_Data.zip",
       "sourceSnapshots": "data/Buggy_Map_Source_Snapshots.zip",
       "schoolDirectory": "data/schools.json",
@@ -65,7 +66,11 @@
     "setupGuide": "https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md#connect-an-mcp-client",
     "installFromRepositoryRoot": "npm ci --prefix integrations/mcp",
     "entryPointRelativeToRepository": "integrations/mcp/server.mjs",
-    "tools": ["list_map_datasets", "search_schools", "build_school_brief"]
+    "tools": ["list_map_datasets", "search_schools", "build_school_brief", "search_homes", "compare_nearby_schools"],
+    "propertyExample": {
+      "search_homes": {"zip": "33133", "maxPrice": 950000, "limit": 2},
+      "compare_nearby_schools": {"homeIds": ["zillow-43858419", "zillow-43858118"], "limit": 3}
+    }
   },
   "$defs": {
     "language": {"type": "string", "enum": ["en", "es"], "default": "en"},

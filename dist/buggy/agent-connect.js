@@ -7,12 +7,14 @@ const t = (english, spanish) => language === 'es' ? spanish : english;
 if (language === 'es') {
   const words = {
     skip: 'Saltar a los datos de conexión', back: 'Volver al mapa', title: 'Conecta un agente de IA',
-    intro: 'Dale a tu asistente acceso a los registros públicos de escuelas de Miami-Dade y a los datos del mapa con el Protocolo de Contexto de Modelo (MCP).',
+    intro: 'Dale a tu asistente acceso a los precios históricos de viviendas de Miami-Dade, los registros escolares y los datos del mapa con el Protocolo de Contexto de Modelo (MCP).',
     connection: 'Conexión al servidor', setup: 'En tu cliente MCP, elige Streamable HTTP y pega la URL del servidor.',
     endpoint: 'URL del servidor', copy: 'Copiar URL', retry: 'Reintentar la carga', guide: 'Guía de conexión',
     catalog: 'Catálogo de herramientas (JSON)', example: 'Prueba una consulta en vivo',
     explain: 'Consulta los conjuntos de datos y las escuelas de Coconut Grove. Elige una escuela para preparar su ficha.',
-    run: 'Buscar escuelas de Coconut Grove'
+    run: 'Buscar escuelas de Coconut Grove', homes: 'Comparar viviendas y escuelas cercanas',
+    homeIntro: 'Busca por código postal y precio máximo anunciado. Compara las tres escuelas del mapa más cercanas a cada una de las dos viviendas de menor precio.',
+    zip: 'Código postal', max: 'Precio máximo anunciado (USD)', compare: 'Comparar las dos primeras viviendas'
   };
   for (const node of document.querySelectorAll('[data-word]')) node.textContent = words[node.dataset.word];
   document.title = words.title + ' | Buggy Maps';
@@ -20,12 +22,14 @@ if (language === 'es') {
   Object.assign($('language'), {href: '?lang=en', textContent: 'English', lang: 'en'});
 }
 
-const requestOptions = () => ({credentials: 'omit', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(12000)});
+function requestOptions(signal) {
+  const timeout = AbortSignal.timeout(12000);
+  return {credentials: 'omit', referrerPolicy: 'no-referrer', signal: signal ? AbortSignal.any([signal, timeout]) : timeout};
+}
 let endpoint;
 let mapBase;
-let session;
-let version;
-let sequence = 0;
+let schoolClient;
+let homeRequest;
 
 function publicURL(value) {
   const url = new URL(value);
@@ -47,6 +51,7 @@ async function configure() {
     $('endpoint').value = endpoint;
     $('copy').disabled = false;
     $('run-example').disabled = false;
+    $('home-run').disabled = false;
     $('connection-status').textContent = '';
   } catch {
     $('connection-status').textContent = t('Connection details are unavailable. Try again or open the setup guide.', 'No se pudieron cargar los datos de conexión. Reintenta o abre la guía.');
@@ -80,23 +85,32 @@ async function readEnvelope(response, id) {
   } finally { await reader.cancel().catch(() => {}); }
 }
 
-async function rpc(method, params, notification = false) {
+async function rpc(client, method, params, notification = false) {
   const message = {jsonrpc: '2.0', method, params};
-  if (!notification) message.id = ++sequence;
+  if (!notification) message.id = ++client.sequence;
   const headers = {'Content-Type': 'application/json', Accept: 'application/json, text/event-stream'};
-  if (version) headers['MCP-Protocol-Version'] = version;
-  if (session) headers['Mcp-Session-Id'] = session;
-  const response = await fetch(endpoint, {...requestOptions(), method: 'POST', headers, body: JSON.stringify(message)});
+  if (client.version) headers['MCP-Protocol-Version'] = client.version;
+  if (client.session) headers['Mcp-Session-Id'] = client.session;
+  const response = await fetch(endpoint, {...requestOptions(client.signal), method: 'POST', headers, body: JSON.stringify(message)});
   if (notification && response.status === 202) return;
   if (!response.ok || notification) throw new Error('MCP request failed');
   const envelope = await readEnvelope(response, message.id);
   if (envelope.jsonrpc !== '2.0' || envelope.id !== message.id || envelope.error || !envelope.result) throw new Error('Invalid response');
-  if (method === 'initialize') session = response.headers.get('Mcp-Session-Id');
+  if (method === 'initialize') client.session = response.headers.get('Mcp-Session-Id');
   return envelope.result;
 }
 
-async function tool(name, args) {
-  const result = await rpc('tools/call', {name, arguments: args});
+async function connect(signal) {
+  const client = {sequence: 0, signal};
+  const hello = await rpc(client, 'initialize', {protocolVersion: '2025-11-25', capabilities: {}, clientInfo: {name: 'buggy-maps-connection-page', version: '1.0'}});
+  if (!['2025-11-25', '2025-06-18', '2025-03-26'].includes(hello.protocolVersion)) throw new Error('Unsupported protocol');
+  client.version = hello.protocolVersion;
+  await rpc(client, 'notifications/initialized', {}, true);
+  return client;
+}
+
+async function tool(client, name, args) {
+  const result = await rpc(client, 'tools/call', {name, arguments: args});
   if (result.isError) throw new Error('Tool failed');
   return result.structuredContent ?? JSON.parse(result.content.find(item => item.type === 'text').text);
 }
@@ -133,7 +147,7 @@ async function buildExample(school) {
   $('sample-brief').hidden = true;
   $('example-status').textContent = t('Preparing the school brief…', 'Preparando la ficha escolar…');
   try {
-    const brief = await tool('build_school_brief', {schoolIds: [school.id], language});
+    const brief = await tool(schoolClient, 'build_school_brief', {schoolIds: [school.id], language});
     const row = brief.schools?.[0];
     const url = publicURL(brief.shareUrl);
     if (brief.schools.length !== 1 || row.id !== school.id || !row.name ||
@@ -161,15 +175,11 @@ async function runExample() {
   $('datasets').replaceChildren(); $('school-options').replaceChildren(); $('sample-brief').hidden = true;
   $('example-status').textContent = t('Connecting to the server…', 'Conectando al servidor…');
   try {
-    session = null; version = null;
-    const hello = await rpc('initialize', {protocolVersion: '2025-11-25', capabilities: {}, clientInfo: {name: 'buggy-maps-connection-page', version: '1.0'}});
-    if (!['2025-11-25', '2025-06-18', '2025-03-26'].includes(hello.protocolVersion)) throw new Error('Unsupported protocol');
-    version = hello.protocolVersion;
-    await rpc('notifications/initialized', {}, true);
-    const datasets = await tool('list_map_datasets', {});
+    schoolClient = await connect();
+    const datasets = await tool(schoolClient, 'list_map_datasets', {});
     renderDatasets(datasets.datasets);
     $('example-status').textContent = t('Finding Coconut Grove schools…', 'Buscando escuelas de Coconut Grove…');
-    const result = await tool('search_schools', {query: 'Coconut Grove', limit: 5, language});
+    const result = await tool(schoolClient, 'search_schools', {query: 'Coconut Grove', limit: 5, language});
     if (!Array.isArray(result.schools)) throw new Error('Invalid schools');
     for (const school of result.schools) {
       const li = element('li');
@@ -184,6 +194,95 @@ async function runExample() {
   } finally { enableExample(true); }
 }
 
+function sourceLink(label, url) {
+  const link = element('a', label);
+  link.href = publicURL(url).href;
+  return link;
+}
+
+const locale = t('en-US', 'es-US');
+const usd = new Intl.NumberFormat(locale, {style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 2});
+const miles = new Intl.NumberFormat(locale, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const schoolTypes = {Public: 'Pública', Private: 'Privada', Charter: 'Chárter'};
+
+function homeCard({home, schools, locationStatus}) {
+  const card = element('article');
+  card.className = 'home-card';
+  const address = element('h3', home.address);
+  const place = element('p', [home.city, home.state, home.zip].filter(Boolean).join(' '));
+  const price = element('p');
+  const date = element('time', home.observedOn);
+  date.dateTime = home.observedOn;
+  price.append(element('strong', usd.format(home.askingPriceUsd)), document.createTextNode(t(' asking price on ', ' anunciado el ')), date);
+  card.append(address, place, price, sourceLink(t('Listing source', 'Fuente del anuncio'), home.sourceUrl));
+  if (!schools.length) {
+    const missing = locationStatus === 'unavailable'
+      ? t('This home has no verified map position.', 'Esta vivienda carece de una ubicación verificada en el mapa.')
+      : t('No mapped schools were returned.', 'No se encontraron escuelas en el mapa.');
+    card.append(element('p', missing));
+    return card;
+  }
+  const list = element('ol');
+  for (const school of schools) {
+    const item = element('li');
+    const type = t(school.type, schoolTypes[school.type] || school.type);
+    const facts = [type, school.grades && t('Grades ', 'Grados ') + school.grades,
+      miles.format(school.distanceMiles) + t(' mi straight-line', ' mi en línea recta')];
+    item.append(sourceLink(school.name, school.sourceUrl), element('div', facts.filter(Boolean).join(' · ')));
+    list.append(item);
+  }
+  card.append(list);
+  return card;
+}
+
+function clearHomes() {
+  homeRequest?.abort();
+  homeRequest = null;
+  $('home-status').textContent = '';
+  $('home-results').replaceChildren();
+  $('home-run').disabled = !endpoint;
+}
+
+async function runHomes(event) {
+  event.preventDefault();
+  clearHomes();
+  const controller = new AbortController();
+  homeRequest = controller;
+  $('home-run').disabled = true;
+  $('home-status').textContent = t('Finding archived homes…', 'Buscando viviendas en el archivo…');
+  const zip = $('home-zip').value;
+  const maxPrice = $('home-max').valueAsNumber;
+  try {
+    const client = await connect(controller.signal);
+    const search = await tool(client, 'search_homes', {zip, maxPrice, limit: 2});
+    if (controller.signal.aborted) return;
+    if (search.priceBasis !== 'archived_asking_usd' || !Array.isArray(search.homes) || search.homes.length > 2) throw new Error('Unexpected search result');
+    if (!search.homes.length) {
+      $('home-status').textContent = t('No archived asking prices match these filters.', 'No hay precios anunciados en el archivo que coincidan con estos filtros.');
+      return;
+    }
+    $('home-status').textContent = t('Finding nearby schools…', 'Buscando escuelas cercanas…');
+    const homeIds = search.homes.map(home => home.id);
+    const result = await tool(client, 'compare_nearby_schools', {homeIds, limit: 3});
+    if (controller.signal.aborted) return;
+    if (result.distanceBasis !== 'straight_line_miles' || result.comparisons.length !== homeIds.length ||
+      result.comparisons.some((row, i) => row.home.id !== homeIds[i])) throw new Error('Unexpected comparison');
+    const cards = element('div');
+    cards.className = 'home-cards';
+    cards.append(...result.comparisons.map(homeCard));
+    const note = element('p', t('Confirm current prices and availability with the listing source. Check enrollment and attendance boundaries with the district.',
+      'Confirma el precio actual y la disponibilidad con la fuente del anuncio. Consulta los requisitos de matrícula y los límites de asistencia con el distrito.'));
+    $('home-results').replaceChildren(cards, note, sourceLink(t('District attendance locator', 'Buscador de zonas escolares del distrito'), result.districtLocator));
+    $('home-status').textContent = t('Homes shown', 'Viviendas mostradas') + ' (' + homeIds.length + t(' of ', ' de ') + search.totalMatches + ').';
+  } catch {
+    if (!controller.signal.aborted) $('home-status').textContent = t('The comparison could not finish. Try again.', 'No se pudo completar la comparación. Vuelve a intentarlo.');
+  } finally {
+    if (homeRequest === controller) { homeRequest = null; $('home-run').disabled = false; }
+  }
+}
+
+$('home-form').addEventListener('input', clearHomes);
+$('home-form').addEventListener('submit', runHomes);
 $('copy').addEventListener('click', async () => {
   if (await writePublicLink(endpoint)) $('connection-status').textContent = t('URL copied.', 'URL copiada.');
   else {

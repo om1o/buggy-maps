@@ -3,10 +3,22 @@ import * as z from 'zod/v4';
 import {validateDataset} from '../../dist/buggy/data-loader.js';
 import {buildSchoolBrief, searchBriefSchools} from '../../dist/buggy/school-brief.js';
 import {createSchoolDirectory} from '../../dist/buggy/school-mode.js';
+import propertySnapshot from './property-snapshot.json' with {type: 'json'};
+import {searchHomes, compareNearbySchools} from './property-tools.mjs';
 
 const language = z.enum(['en', 'es']).default('en');
 const readOnly = {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false};
 const response = value => ({structuredContent: value, content: [{type: 'text', text: JSON.stringify(value)}]});
+const home = z.object({
+  id: z.string(), address: z.string(), city: z.string(), state: z.string(), zip: z.string(),
+  askingPriceUsd: z.number().positive(), priceLabel: z.string(), observedOn: z.string(), sourceUrl: z.url(),
+  currentAvailability: z.literal('unverified'),
+  beds: z.number().nullable(), baths: z.number().nullable(), sqft: z.number().nullable()
+});
+const nearbySchool = z.object({
+  id: z.string(), name: z.string(), grades: z.string(), type: z.string(),
+  sourceUrl: z.string(), distanceMiles: z.number().nonnegative()
+});
 
 export function schoolServerFactory(descriptor, loadSnapshot) {
   const web = descriptor['x-web'];
@@ -42,6 +54,29 @@ export function schoolServerFactory(descriptor, loadSnapshot) {
     }, async ({schoolIds, language}) => {
       await directory.load();
       return response(buildSchoolBrief(schoolIds, directory, language));
+    });
+    server.registerTool('search_homes', {
+      description: 'Find homes by exact five-digit ZIP and/or inclusive USD asking-price bounds in the archived listing snapshot. Sorted by asking price, then ID. Prices and availability require current verification. Use returned IDs with compare_nearby_schools.',
+      inputSchema: z.strictObject({
+        zip: z.string().regex(/^\d{5}$/).optional(),
+        minPrice: z.number().nonnegative().optional(), maxPrice: z.number().nonnegative().optional(),
+        limit: z.number().int().min(1).max(20).default(6), offset: z.number().int().nonnegative().default(0)
+      }),
+      outputSchema: z.object({priceBasis: z.literal('archived_asking_usd'), availabilityNote: z.string(),
+        totalMatches: z.number().int().nonnegative(), offset: z.number().int().nonnegative(), homes: z.array(home)}),
+      annotations: readOnly
+    }, args => response(searchHomes(propertySnapshot.homes, args)));
+    server.registerTool('compare_nearby_schools', {
+      description: 'Compare the closest mapped physical campuses for one to three homes returned by search_homes. Returns grades, school type, source and straight-line miles for each home in the requested order. Check the district locator for attendance boundaries.',
+      inputSchema: z.strictObject({homeIds: z.array(z.string().min(1).max(100)).min(1).max(3),
+        limit: z.number().int().min(1).max(5).default(3)}),
+      outputSchema: z.object({distanceBasis: z.literal('straight_line_miles'), attendanceAssignment: z.literal('unverified'), attendanceNote: z.string(),
+        districtLocator: z.url(), comparisons: z.array(z.object({home, locationStatus: z.enum(['mapped', 'unavailable']),
+          schools: z.array(nearbySchool)}))}),
+      annotations: readOnly
+    }, async args => {
+      await directory.load();
+      return response(compareNearbySchools(propertySnapshot.homes, directory.all, args));
     });
     return server;
   };
