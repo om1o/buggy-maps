@@ -4,7 +4,7 @@
 
 ## Start here
 
-- [Public MCP endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp) — Streamable HTTP, no credentials. Use tools/list to discover search_homes, compare_nearby_schools, list_map_datasets, search_schools and build_school_brief.
+- [Public MCP endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp) — Streamable HTTP, no credentials. Use tools/list to discover search_homes, check_home_facts, compare_nearby_schools, list_map_datasets, search_schools and build_school_brief.
 - [Connect or try the tools on the live map](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-connect.html)
 - [Public dataset catalog and tool descriptor](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-tools.json)
 - [Agent guide and MCP setup](https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md)
@@ -12,6 +12,8 @@
 - [Full repository file index](https://api.github.com/repos/om1o/buggy-maps/git/trees/main?recursive=1)
 
 ## Data
+
+For current sale status, asking price and zoned schools, call check_home_facts with a homeId or a street address (including unit) and a five-digit ZIP. Cite each field's source and source date, or report it as unverified. A null price means unknown. The check time and the source update date are separate. The district confirms enrollment.
 
 - [School directory JSON](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/schools.json)
 - [Property coverage and snapshot date](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/coverage.json)

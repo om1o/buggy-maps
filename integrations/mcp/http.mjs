@@ -3,7 +3,10 @@ import descriptor from '../../dist/buggy/agent-tools.json' with {type: 'json'};
 import snapshot from '../../dist/buggy/data/schools.json' with {type: 'json'};
 import {schoolServerFactory} from './tools.mjs';
 
-const mcp = createMcpHandler(schoolServerFactory(descriptor, () => snapshot), {
+const env = name => globalThis.Deno?.env.get(name) ?? globalThis.process?.env?.[name];
+const mcp = createMcpHandler(schoolServerFactory(descriptor, () => snapshot, {
+  dataset: env('BUGGY_BRIDGE_DATASET'), token: env('BUGGY_BRIDGE_SERVER_TOKEN')
+}), {
   maxRequestBodySize: 65536
 });
 

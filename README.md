@@ -8,6 +8,8 @@ Connect an AI client to the live **Streamable HTTP** endpoint to find homes by a
 
 ## Get the data
 
+Use `check_home_facts` with a home ID or street address and ZIP to check current sale status, asking price and Miami-Dade school attendance zones. Each field carries dated evidence or an explicit unverified result. [Field guide and example](docs/AI-AGENTS.md#check-a-homes-current-facts)
+
 Download school records, property rows, source snapshots, street geometry and the driving graph without signing in. The catalog provides paths for both the website and raw GitHub downloads. The full repository includes the map and its published data. Each source retains its own terms and credits. [Dataset catalog](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/agent-tools.json) · [School directory JSON](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/schools.json) · [Property coverage](dist/buggy/data/coverage.json) · [Download everything](https://github.com/om1o/buggy-maps/archive/refs/heads/main.zip)
 
 ## Run the map

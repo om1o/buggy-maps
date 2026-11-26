@@ -5,6 +5,7 @@ import {buildSchoolBrief, searchBriefSchools} from '../../dist/buggy/school-brie
 import {createSchoolDirectory} from '../../dist/buggy/school-mode.js';
 import propertySnapshot from './property-snapshot.json' with {type: 'json'};
 import {searchHomes, compareNearbySchools} from './property-tools.mjs';
+import {checkHomeFacts, homeFactsInput, homeFactsOutput} from './home-facts.mjs';
 
 const language = z.enum(['en', 'es']).default('en');
 const readOnly = {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false};
@@ -20,7 +21,7 @@ const nearbySchool = z.object({
   sourceUrl: z.string(), distanceMiles: z.number().nonnegative()
 });
 
-export function schoolServerFactory(descriptor, loadSnapshot) {
+export function schoolServerFactory(descriptor, loadSnapshot, listingConfig = {}) {
   const web = descriptor['x-web'];
   const directory = createSchoolDirectory(async () => validateDataset('data/schools.json', await loadSnapshot()));
   const resultSchema = name => z.fromJSONSchema({...descriptor.$defs[name], $defs: descriptor.$defs});
@@ -56,7 +57,7 @@ export function schoolServerFactory(descriptor, loadSnapshot) {
       return response(buildSchoolBrief(schoolIds, directory, language));
     });
     server.registerTool('search_homes', {
-      description: 'Find homes by exact five-digit ZIP and/or inclusive USD asking-price bounds in the archived listing snapshot. Sorted by asking price, then ID. Prices and availability require current verification. Use returned IDs with compare_nearby_schools.',
+      description: 'Find homes by five-digit ZIP and/or inclusive archived asking-price bounds in USD, ordered by price then ID. Pass a returned ID to check_home_facts for current listing facts and attendance zones or compare_nearby_schools for distances.',
       inputSchema: z.strictObject({
         zip: z.string().regex(/^\d{5}$/).optional(),
         minPrice: z.number().nonnegative().optional(), maxPrice: z.number().nonnegative().optional(),
@@ -67,7 +68,7 @@ export function schoolServerFactory(descriptor, loadSnapshot) {
       annotations: readOnly
     }, args => response(searchHomes(propertySnapshot.homes, args)));
     server.registerTool('compare_nearby_schools', {
-      description: 'Compare the closest mapped physical campuses for one to three homes returned by search_homes. Returns grades, school type, source and straight-line miles for each home in the requested order. Check the district locator for attendance boundaries.',
+      description: 'Compare the closest mapped campuses for one to three homes returned by search_homes. Returns grades, school type, source and straight-line miles in the requested order. Use check_home_facts for attendance zones.',
       inputSchema: z.strictObject({homeIds: z.array(z.string().min(1).max(100)).min(1).max(3),
         limit: z.number().int().min(1).max(5).default(3)}),
       outputSchema: z.object({distanceBasis: z.literal('straight_line_miles'), attendanceAssignment: z.literal('unverified'), attendanceNote: z.string(),
@@ -78,6 +79,10 @@ export function schoolServerFactory(descriptor, loadSnapshot) {
       await directory.load();
       return response(compareNearbySchools(propertySnapshot.homes, directory.all, args));
     });
+    server.registerTool('check_home_facts', {
+      description: 'Check whether a Miami-Dade home is listed for sale, its current asking price in USD, and its zoned public schools by grade band. Supply a homeId OR a street address including unit and a five-digit ZIP. Report each field with its source and date, or say unverified. County attendance zones describe geographic assignment. Confirm enrollment with the district.',
+      inputSchema: homeFactsInput, outputSchema: homeFactsOutput, annotations: {...readOnly, openWorldHint: true}
+    }, async args => response(await checkHomeFacts(propertySnapshot.homes, args, {listingConfig})));
     return server;
   };
 }

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Buggy Maps home and school tools",
-  "description": "x-mcp describes the public MCP service for home search, nearby campus comparisons and school briefs. The JSON Schema inputs below describe the two local school CLI commands.",
+  "description": "x-mcp describes public tools for archived home search, current listing and school-zone checks, nearby campus comparisons and school briefs. The JSON Schema inputs below describe the two local school CLI commands.",
   "oneOf": [
     {"$ref": "#/$defs/searchInput"},
     {"$ref": "#/$defs/briefInput"}
@@ -66,10 +66,21 @@
     "setupGuide": "https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md#connect-an-mcp-client",
     "installFromRepositoryRoot": "npm ci --prefix integrations/mcp",
     "entryPointRelativeToRepository": "integrations/mcp/server.mjs",
-    "tools": ["list_map_datasets", "search_schools", "build_school_brief", "search_homes", "compare_nearby_schools"],
+    "tools": ["list_map_datasets", "search_schools", "build_school_brief", "search_homes", "compare_nearby_schools", "check_home_facts"],
+    "currentFactSources": {
+      "listingProvider": "MIAMI MLS via Bridge",
+      "publicListingSearch": "https://www.sfpropertysearch.com/en",
+      "districtLocator": "https://app.guidek12.com/miami/school_search/current/",
+      "addressPoints": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/GeoAddress_gdb/FeatureServer/0",
+      "unitPoints": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/PaGISView_gdb/FeatureServer/0",
+      "elementaryZones": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/ElementaryAttendanceBoundary_gdb/FeatureServer/0",
+      "middleZones": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/MiddleAttendanceBoundary_gdb/FeatureServer/0",
+      "highZones": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/HighAttendanceBoundary_gdb/FeatureServer/0"
+    },
     "propertyExample": {
       "search_homes": {"zip": "33133", "maxPrice": 950000, "limit": 2},
-      "compare_nearby_schools": {"homeIds": ["zillow-43858419", "zillow-43858118"], "limit": 3}
+      "compare_nearby_schools": {"homeIds": ["zillow-43858419", "zillow-43858118"], "limit": 3},
+      "check_home_facts": {"address": "5550 SW 87th Ave", "zip": "33165"}
     }
   },
   "$defs": {

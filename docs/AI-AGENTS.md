@@ -25,6 +25,7 @@ The live map's connection page copies the URL and lets you try the tools in your
 | `build_school_brief` | `{"schoolIds":["fl-13-0841"],"language":"es"}` | Campus facts and a Spanish school-only map link |
 | `search_homes` | `{"zip":"33133","minPrice":500000,"maxPrice":950000,"limit":2}` | Matching home IDs, addresses, dated asking prices and source links |
 | `compare_nearby_schools` | `{"homeIds":["zillow-43858419","zillow-43858118"],"limit":3}` | The closest mapped campuses for each home, with grade ranges, school types, sources and straight-line miles |
+| `check_home_facts` | `{"address":"5550 SW 87th Ave","zip":"33165"}` or `{"homeId":"zillow-44205211"}` | Individually sourced sale status, asking price and elementary, middle and high school attendance zones |
 
 Give `search_homes` a five-digit ZIP, a minimum price, a maximum price, or a combination. Both price bounds are inclusive USD amounts. Results are ordered by price, then ID. The response includes the total match count. Use `limit` (1–20) and `offset` to page through it. Each price has an observation date and a listing source for a current availability check.
 
@@ -32,7 +33,15 @@ Pass one to three IDs from your search to `compare_nearby_schools`. It returns u
 
 This release includes 1,661 disclosed individual homes classified as single-family in the source, with asking prices observed from March 6 through November 15, 2026. Sale prices, county assessments and builder-community plans are excluded. Rebuild the search snapshot from the repository's published property records with `node integrations/mcp/build-property-snapshot.mjs`. [Search snapshot on GitHub](../integrations/mcp/property-snapshot.json) · [Download the same snapshot from the map, gzipped JSON](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/data/archived-asking-homes.json.gz)
 
-To verify a deployment using the official JavaScript MCP client, run `npm ci --prefix integrations/mcp` in a checkout, then `node integrations/mcp/verify-http.mjs https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp`. The test exercises all five tools, including searching by a price range and passing the returned IDs to a school comparison. [Edge Function entry point](../supabase/functions/buggy-maps-mcp/index.ts)
+To verify a deployment using the official JavaScript MCP client, run `npm ci --prefix integrations/mcp` in a checkout, then `node integrations/mcp/verify-http.mjs https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp`. It exercises all six tools. [Edge Function entry point](../supabase/functions/buggy-maps-mcp/index.ts)
+
+## Check a home's current facts
+
+Supply either a search result's home ID or a complete street address and ZIP, including the unit where applicable. Read `listing.saleStatus` and `listing.askingPriceUsd` separately. Quote a value only if its `verification` is `verified`, and cite `sourceUrl` and `sourceUpdatedAt`. A null value means unverified. The top-level `checkedAt` dates the request. Each listing field records when its provider was actually queried. The response also includes a public MLS search link for follow-up.
+
+An operator with a Miami MLS agreement permitting public display via this service can set `BUGGY_BRIDGE_DATASET=miamire` and `BUGGY_BRIDGE_SERVER_TOKEN` as server secrets. Visitors supply neither. The adapter requires an exact residential listing match with public listing and address display enabled. It reports the MLS status as published and reports an asking price only for an Active listing with a positive price. A live MLS response can report an unchanged listing. Show both the time of the check and the original record modification time so the reader can assess freshness. A missing feed, matching record or reliable date yields an unverified result. [Miami REALTORS data access](https://miamirealtors.zendesk.com/hc/en-us/articles/47430015920667-Providing-IDX-Data-Access-for-Your-Real-Estate-Website) · [Bridge API](https://bridgedataoutput.com/docs/explore) · [Public MLS search](https://www.sfpropertysearch.com/en)
+
+For school assignment, report each matched band's school, grades, school year, source date and county feature link. For other bands report unverified and the supplied reason. The service checks a county address against three reviewed 2026–27 attendance layers and withholds ambiguous or near-boundary results. A district placement decision can depend on grade, exceptions and program choice. Confirm placement with Miami-Dade County Public Schools. [County address points](https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/GeoAddress_gdb/FeatureServer/0) · [County boundary revision history](https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/ElementaryAttendanceBoundary_gdb/FeatureServer/0/metadata) · [District locator](https://app.guidek12.com/miami/school_search/current/)
 
 ## Run the MCP server locally
 

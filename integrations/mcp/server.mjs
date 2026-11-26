@@ -10,4 +10,4 @@ await serveStdio(schoolServerFactory(descriptor, async () => {
   } catch {
     throw new Error('Restore dist/buggy/data/schools.json from the Buggy Maps checkout.');
   }
-}));
+}, {dataset: process.env.BUGGY_BRIDGE_DATASET, token: process.env.BUGGY_BRIDGE_SERVER_TOKEN}));

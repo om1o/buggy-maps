@@ -22,8 +22,8 @@ if (language === 'es') {
   Object.assign($('language'), {href: '?lang=en', textContent: 'English', lang: 'en'});
 }
 
-function requestOptions(signal) {
-  const timeout = AbortSignal.timeout(12000);
+function requestOptions(signal, timeoutMs = 12000) {
+  const timeout = AbortSignal.timeout(timeoutMs);
   return {credentials: 'omit', referrerPolicy: 'no-referrer', signal: signal ? AbortSignal.any([signal, timeout]) : timeout};
 }
 let endpoint;
@@ -91,7 +91,8 @@ async function rpc(client, method, params, notification = false) {
   const headers = {'Content-Type': 'application/json', Accept: 'application/json, text/event-stream'};
   if (client.version) headers['MCP-Protocol-Version'] = client.version;
   if (client.session) headers['Mcp-Session-Id'] = client.session;
-  const response = await fetch(endpoint, {...requestOptions(client.signal), method: 'POST', headers, body: JSON.stringify(message)});
+  const timeoutMs = method === 'tools/call' && params.name === 'check_home_facts' ? 22000 : 12000;
+  const response = await fetch(endpoint, {...requestOptions(client.signal, timeoutMs), method: 'POST', headers, body: JSON.stringify(message)});
   if (notification && response.status === 202) return;
   if (!response.ok || notification) throw new Error('MCP request failed');
   const envelope = await readEnvelope(response, message.id);
@@ -204,8 +205,113 @@ const locale = t('en-US', 'es-US');
 const usd = new Intl.NumberFormat(locale, {style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 2});
 const miles = new Intl.NumberFormat(locale, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 const schoolTypes = {Public: 'Pública', Private: 'Privada', Charter: 'Chárter'};
+const statuses = {Active: 'En venta', Pending: 'Venta pendiente', 'Active Under Contract': 'En venta bajo contrato', 'Coming Soon': 'Próximamente en venta'};
+const bands = {elementary: t('Elementary', 'Primaria'), middle: t('Middle', 'Secundaria básica'), high: t('High', 'Secundaria superior')};
+const unverified = t('Unverified', 'Sin verificar');
+const dateOnly = new Intl.DateTimeFormat(locale, {dateStyle: 'medium', timeZone: 'UTC'});
+const dateAndTime = new Intl.DateTimeFormat(locale, {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric',
+  minute: '2-digit', timeZone: 'America/New_York', timeZoneName: 'short'});
 
-function homeCard({home, schools, locationStatus}) {
+function dateLine(label, value) {
+  const when = new Date(value);
+  if (!value || !Number.isFinite(when.getTime())) throw new Error('Missing source date');
+  const time = element('time', (value.length === 10 ? dateOnly : dateAndTime).format(when));
+  time.dateTime = value;
+  const line = element('p', label + ' ');
+  line.append(time);
+  return line;
+}
+
+function listingFact(label, field, value) {
+  const block = element('div');
+  const verified = field.verification === 'verified';
+  if (verified && (!value || !field.checkedAt || !field.sourceUpdatedAt || !field.sourceUrl)) throw new Error('Missing listing evidence');
+  block.append(element('h5', label), element('p', verified ? value : unverified));
+  if (field.reason === 'provider_not_configured') block.append(element('p', t('Live MLS access is unavailable.', 'El acceso en vivo al MLS no está disponible.')));
+  if (field.reason === 'provider_unavailable') block.append(element('p', t('The MLS could not complete the check.', 'El MLS no pudo completar la consulta.')));
+  if (field.reason === 'ambiguous_listings' || field.reason === 'no_exact_current_listing') block.append(element('p', t('The MLS could not identify one current listing for this address.', 'El MLS no pudo identificar un único anuncio actual para esta dirección.')));
+  if (field.reason === 'listing_not_active') block.append(element('p', t('The MLS did not report an active listing.', 'El MLS no indicó que el anuncio estuviera activo.')));
+  if (field.checkedAt) block.append(dateLine(t('MLS check', 'Consulta al MLS'), field.checkedAt));
+  if (field.sourceUpdatedAt) block.append(dateLine(t('MLS record updated', 'Actualización del registro MLS'), field.sourceUpdatedAt));
+  if (field.sourceUrl) block.append(sourceLink(t('MLS record (licensed access)', 'Registro MLS (acceso con licencia)'), field.sourceUrl));
+  return block;
+}
+
+function renderCheck(home, result) {
+  const {listing, schoolAssignment: district} = result;
+  if (result.home?.id !== home.id || result.home.address !== home.address || result.home.zip !== home.zip ||
+    district.homeId !== home.id || !Array.isArray(district.bands) ||
+    district.bands.length !== 3 || new Set(district.bands.map(b => b.band)).size !== 3) throw new Error('Unexpected home facts');
+  const status = listing.saleStatus.value;
+  const amount = listing.askingPriceUsd.value;
+  const content = document.createDocumentFragment();
+  content.append(dateLine(t('Check requested', 'Consulta solicitada'), result.checkedAt),
+    listingFact(t('Current listing status', 'Estado actual del anuncio'), listing.saleStatus, Object.hasOwn(statuses, status) && t(status, statuses[status])),
+    listingFact(t('Current asking price', 'Precio anunciado actual'), listing.askingPriceUsd,
+      listing.saleStatus.verification === 'verified' && status === 'Active' && Number.isFinite(amount) && amount > 0 ? usd.format(amount) : null));
+  if (listing.listingId) content.append(element('p', ['MLS ' + listing.listingId, listing.listingOffice].filter(Boolean).join(' · ')));
+  content.append(sourceLink(t('Public MLS search', 'Buscador público del MLS'), listing.publicSearchUrl),
+    element('h5', t('Attendance zones', 'Zonas de asistencia escolar')),
+    dateLine(t('Boundary check', 'Consulta de zonas'), district.checkedAt),
+    sourceLink(t('County address source', 'Fuente de direcciones del condado'), district.addressSourceUrl));
+  if (district.addressStatus === 'unverified') content.append(element('p', t('The county could not confirm this exact address.', 'El condado no pudo confirmar esta dirección exacta.')));
+  const list = element('ul');
+  for (const band of district.bands) {
+    if (!Object.hasOwn(bands, band.band)) throw new Error('Unexpected grade band');
+    const item = element('li');
+    item.append(element('strong', bands[band.band]));
+    if (band.status === 'matched') {
+      if (!band.schoolName || !band.schoolYear || !band.sourceDate || !band.evidenceUrl) throw new Error('Missing boundary evidence');
+      item.append(element('div', [band.schoolName, band.grades && t('Grades ', 'Grados ') + band.grades, band.schoolYear].filter(Boolean).join(' · ')));
+    } else {
+      item.append(element('div', unverified));
+    }
+    if (band.sourceDate) item.append(dateLine(t('Boundary edition', 'Edición de la zona'), band.sourceDate));
+    item.append(sourceLink(t('County boundary source', 'Fuente del condado'), band.evidenceUrl || band.sourceUrl));
+    list.append(item);
+  }
+  content.append(list, element('p', t('County boundaries are approximate. Confirm enrollment, grade exceptions and school choice with the district.',
+    'Los límites del condado son aproximados. Confirma con el distrito la matrícula, las excepciones por grado y la elección de escuela.')),
+    sourceLink(t('District attendance locator', 'Buscador de zonas escolares del distrito'), district.districtLocator));
+  return content;
+}
+
+function checkPanel(home, client) {
+  const panel = element('div');
+  const button = element('button', t('Check listing and school zones', 'Verificar anuncio y zonas escolares'));
+  button.type = 'button';
+  button.setAttribute('aria-label', button.textContent + ' · ' + home.address);
+  const status = element('p');
+  status.setAttribute('role', 'status');
+  const result = element('section');
+  result.hidden = true;
+  result.id = 'facts-' + home.id;
+  button.setAttribute('aria-controls', result.id);
+  button.addEventListener('click', async () => {
+    if (button.getAttribute('aria-disabled') === 'true') return;
+    button.setAttribute('aria-disabled', 'true');
+    result.hidden = true;
+    status.textContent = t('Checking this address…', 'Verificando esta dirección…');
+    try {
+      const response = await tool(client, 'check_home_facts', {homeId: home.id});
+      if (!panel.isConnected) return;
+      const title = element('h4', t('Address verification', 'Verificación de la dirección'));
+      title.id = result.id + '-title';
+      title.tabIndex = -1;
+      result.setAttribute('aria-labelledby', title.id);
+      result.replaceChildren(title, renderCheck(home, response));
+      result.hidden = false;
+      status.textContent = t('Check complete.', 'Consulta completada.');
+      if (document.activeElement === button) title.focus();
+    } catch {
+      status.textContent = t('The check could not finish. Try again.', 'No se pudo completar la verificación. Inténtalo de nuevo.');
+    } finally { button.removeAttribute('aria-disabled'); }
+  });
+  panel.append(button, status, result);
+  return panel;
+}
+
+function homeCard({home, schools, locationStatus}, client) {
   const card = element('article');
   card.className = 'home-card';
   const address = element('h3', home.address);
@@ -214,12 +320,12 @@ function homeCard({home, schools, locationStatus}) {
   const date = element('time', home.observedOn);
   date.dateTime = home.observedOn;
   price.append(element('strong', usd.format(home.askingPriceUsd)), document.createTextNode(t(' asking price on ', ' anunciado el ')), date);
-  card.append(address, place, price, sourceLink(t('Listing source', 'Fuente del anuncio'), home.sourceUrl));
+  card.append(address, place, price, sourceLink(t('Archived listing source', 'Fuente del anuncio histórico'), home.sourceUrl));
   if (!schools.length) {
     const missing = locationStatus === 'unavailable'
       ? t('This home has no verified map position.', 'Esta vivienda carece de una ubicación verificada en el mapa.')
       : t('No mapped schools were returned.', 'No se encontraron escuelas en el mapa.');
-    card.append(element('p', missing));
+    card.append(element('p', missing), checkPanel(home, client));
     return card;
   }
   const list = element('ol');
@@ -231,7 +337,7 @@ function homeCard({home, schools, locationStatus}) {
     item.append(sourceLink(school.name, school.sourceUrl), element('div', facts.filter(Boolean).join(' · ')));
     list.append(item);
   }
-  card.append(list);
+  card.append(element('h4', t('Nearby schools', 'Escuelas cercanas')), list, checkPanel(home, client));
   return card;
 }
 
@@ -269,7 +375,7 @@ async function runHomes(event) {
       result.comparisons.some((row, i) => row.home.id !== homeIds[i])) throw new Error('Unexpected comparison');
     const cards = element('div');
     cards.className = 'home-cards';
-    cards.append(...result.comparisons.map(homeCard));
+    cards.append(...result.comparisons.map(row => homeCard(row, client)));
     const note = element('p', t('Confirm current prices and availability with the listing source. Check enrollment and attendance boundaries with the district.',
       'Confirma el precio actual y la disponibilidad con la fuente del anuncio. Consulta los requisitos de matrícula y los límites de asistencia con el distrito.'));
     $('home-results').replaceChildren(cards, note, sourceLink(t('District attendance locator', 'Buscador de zonas escolares del distrito'), result.districtLocator));
@@ -277,7 +383,7 @@ async function runHomes(event) {
   } catch {
     if (!controller.signal.aborted) $('home-status').textContent = t('The comparison could not finish. Try again.', 'No se pudo completar la comparación. Vuelve a intentarlo.');
   } finally {
-    if (homeRequest === controller) { homeRequest = null; $('home-run').disabled = false; }
+    if (homeRequest === controller) $('home-run').disabled = false;
   }
 }
 
