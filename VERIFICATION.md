@@ -1,5 +1,16 @@
 # Address selection verification
 
+## Home and nearby-school MCP acceptance, November 26, 2026
+
+The public endpoint passed anonymous tests for exact ZIP matching, inclusive price bounds, pagination, unknown and duplicate IDs, and comparison of two homes in the requested order. The asking-price snapshot contains 1,661 homes in 39 ZIP codes. A full local pass paginated every home exactly once and compared its five closest physical campuses against the published directory. Three campuses had no published grade range and retained their empty source value.
+
+| Live AI client | What the model did | Observed result |
+| --- | --- | --- |
+| Qwen3-0.6B, local CPU, no provider or map sign-in | Searched ZIP 33135 at exactly $349,000, then passed the returned ID to `compare_nearby_schools` | Kids Small World Learning Center LLC at 0.25 straight-line miles and Waymaker Academy at 0.40 miles. The model conveyed uncertainty about availability. It omitted the school-assignment caveat in its summary. |
+| Codex, no map credentials | Tested $348,999 in ZIP 33135, searched two ZIPs at $349,000, then compared both returned IDs | Zero matches below the boundary, one in each ZIP at the boundary, four independently checked distances. The model reported both availability and assignment as unverified. |
+
+The local model used an ungated Q5_K_M quantization of Qwen3-0.6B with llama.cpp. Its inference ran on loopback. The service returns `currentAvailability: "unverified"` for each home and `attendanceAssignment: "unverified"` for each comparison. The live SDK test also exercises the three original tools. [Run the HTTP check](docs/AI-AGENTS.md#connect-an-mcp-client) · [Qwen model card](https://huggingface.co/Qwen/Qwen3-0.6B) · [Quantized model revision](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/tree/50968a4468ef4233ed78cd7c3de230dd1d61a56b)
+
 ## Public MCP acceptance, November 26, 2026
 
 Codex CLI 0.160.0 ran in an empty directory with the public Streamable HTTP URL as its only MCP server. Its existing ChatGPT session supplied the model. The map endpoint received no API key or account credentials. The client event stream recorded three completed MCP calls with zero tool errors.
