@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {"node": ">=24"},
-  "scripts": {"test": "node verify-stdio.mjs"},
+  "scripts": {"test": "node verify-stdio.mjs && node verify-http.mjs"},
   "dependencies": {
     "@modelcontextprotocol/server": "2.4.0",
     "zod": "4.6.7"

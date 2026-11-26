@@ -57,7 +57,11 @@
     "districtLocator": "https://app.guidek12.com/miami/school_search/current/"
   },
   "x-mcp": {
-    "transport": "stdio",
+    "transport": "streamable-http",
+    "url": "https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp",
+    "authentication": "none",
+    "connectPage": "https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-connect.html",
+    "localTransport": "stdio",
     "setupGuide": "https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md#connect-an-mcp-client",
     "installFromRepositoryRoot": "npm ci --prefix integrations/mcp",
     "entryPointRelativeToRepository": "integrations/mcp/server.mjs",

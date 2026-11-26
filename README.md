@@ -4,6 +4,8 @@ Plan a Miami-Dade school drive, compare campuses, calculate a departure time, an
 
 [Open the map](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/) · [Prepare a client brief](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/client-brief.html) · [Connect an AI agent](docs/AI-AGENTS.md#connect-an-mcp-client)
 
+Connect an AI client to the live **Streamable HTTP** endpoint to list map datasets, find a campus, or create a school brief. Authentication is **None**. [Copy the URL and try the tools](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-connect.html) · [Public MCP endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp)
+
 ## Get the data
 
 Download school records, property rows, source snapshots, street geometry and the driving graph without signing in. The catalog provides paths for both the website and raw GitHub downloads. The full repository includes the map and its published data. Each source retains its own terms and credits. [Dataset catalog](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/agent-tools.json) · [School directory JSON](https://raw.githubusercontent.com/om1o/buggy-maps/main/dist/buggy/data/schools.json) · [Property coverage](dist/buggy/data/coverage.json) · [Download everything](https://github.com/om1o/buggy-maps/archive/refs/heads/main.zip)

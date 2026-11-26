@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <title>Connect an AI agent | Buggy Maps</title>
+  <meta name="description" content="Connect an AI client to Buggy Maps without an account. Try its public map data, Miami-Dade campus search and bilingual school briefs.">
+  <link rel="icon" href="./assets/buggy-icon.png">
+  <link rel="stylesheet" href="./client-brief.css">
+  <link rel="stylesheet" href="./agent-connect.css">
+  <link rel="help" type="application/json" href="./agent-tools.json">
+  <script type="module" src="./agent-connect.js"></script>
+</head>
+<body data-own-language>
+  <a class="skip-link" href="#connect" data-word="skip">Skip to connection details</a>
+  <header class="masthead"><div class="wrap masthead-inner">
+    <img class="logo" src="./assets/buggy-logo.png" width="287" height="100" alt="Buggy">
+    <nav class="top-actions"><a href="./" id="back" data-word="back">Back to map</a><a id="language" lang="es" href="?lang=es">Español</a></nav>
+  </div></header>
+  <main id="connect" class="wrap connect-main" tabindex="-1">
+    <div class="intro">
+      <h1 data-word="title">Connect an AI agent</h1>
+      <p data-word="intro">Give your assistant access to public Miami-Dade school records and map datasets through the Model Context Protocol (MCP).</p>
+    </div>
+    <div class="connect-grid">
+      <section class="connect-panel" aria-labelledby="server-title">
+        <h2 id="server-title" data-word="connection">Server connection</h2>
+        <p data-word="setup">In your MCP client, choose Streamable HTTP and paste the server URL.</p>
+        <label for="endpoint" data-word="endpoint">Server URL</label>
+        <div class="endpoint-field"><input id="endpoint" type="url" readonly dir="ltr"><button type="button" id="copy" disabled data-word="copy">Copy URL</button></div>
+        <p class="status" role="status" id="connection-status"></p>
+        <button type="button" id="retry" hidden data-word="retry">Retry connection details</button>
+        <div class="resource-links">
+          <a href="https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md" data-word="guide">Agent setup guide</a>
+          <a href="./agent-tools.json" data-word="catalog">Tool catalog (JSON)</a>
+        </div>
+      </section>
+      <section class="connect-example" aria-labelledby="example-title">
+        <h2 id="example-title" data-word="example">Try a live request</h2>
+        <p data-word="explain">Ask the server for available datasets and Coconut Grove schools. Choose a campus to build its school brief.</p>
+        <button type="button" id="run-example" disabled data-word="run">Find Coconut Grove schools</button>
+        <p class="status" role="status" id="example-status"></p>
+        <div id="datasets"></div>
+        <ul id="school-options"></ul>
+        <div id="sample-brief" hidden></div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

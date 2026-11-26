@@ -1,9 +1,11 @@
 # Buggy Maps
 
-> Miami-Dade school and Miami-area property snapshots, with local read-only tools for comparing campuses and building bilingual family briefs.
+> Miami-Dade school and Miami-area property snapshots, with anonymous remote MCP tools for comparing campuses and building bilingual family briefs.
 
 ## Start here
 
+- [Public MCP endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp) — Streamable HTTP, no credentials. Use tools/list to discover list_map_datasets, search_schools and build_school_brief.
+- [Connect or try the tools on the live map](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-connect.html)
 - [Public dataset catalog and tool descriptor](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-tools.json)
 - [Agent guide and MCP setup](https://github.com/om1o/buggy-maps/blob/main/docs/AI-AGENTS.md)
 - [GitHub repository](https://github.com/om1o/buggy-maps)

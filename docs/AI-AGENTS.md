@@ -10,6 +10,24 @@ The property collection is a dated snapshot. Check its coverage file before desc
 
 ## Connect an MCP client
 
+Choose a remote **Streamable HTTP** server in your AI client and paste this URL. Choose **None** if the client asks for an authentication method.
+
+```text
+https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp
+```
+
+The live map's connection page copies the URL and lets you try the tools in your browser. The endpoint runs on the map's Supabase backend and reads the school snapshot included in the release. It requires no account, API key, or local installation. [Connect from the map](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-connect.html)
+
+| Tool | Example arguments | Result |
+| --- | --- | --- |
+| `list_map_datasets` | `{}` | Download and attribution links for each published dataset |
+| `search_schools` | `{"query":"Coconut Grove Elementary","limit":3}` | Matching campuses with directory IDs |
+| `build_school_brief` | `{"schoolIds":["fl-13-0841"],"language":"es"}` | Campus facts and a Spanish school-only map link |
+
+To verify a deployment using the official JavaScript MCP client, run `npm ci --prefix integrations/mcp` in a checkout, then `node integrations/mcp/verify-http.mjs https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp`. The test checks all three tools, both brief languages and rejection of an unknown campus ID. The hosted entry point imports the same directory and tool definitions as the local server. [Edge Function entry point](../supabase/functions/buggy-maps-mcp/index.ts)
+
+## Run the MCP server locally
+
 Install Node.js 24, then run the following from a terminal.
 
 ```sh
