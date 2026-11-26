@@ -67,6 +67,22 @@ try {
   assert.equal(facts.listing.askingPriceUsd.verification, 'unverified');
   assert.equal(facts.listing.askingPriceUsd.value, null);
   assert.equal(facts.listing.saleStatus.value, null);
+  if (process.argv.includes('--zones-2026')) {
+    const zoned = await call('check_home_facts', {address:'5550 SW 87th Ave, ZIP 33165'});
+    assert.deepEqual(zoned.schoolAssignment.bands.map(b => [b.schoolId, b.schoolYear, b.sourceDate]), [
+      ['0441', '2026-2027', '2026-09-21'], ['6211', '2026-2027', '2026-09-21'], ['7741', '2026-2027', '2026-09-21']
+    ]);
+    assert.equal(zoned.schoolAssignment.enrollmentStatus, 'unverified');
+    assert.ok(zoned.schoolAssignment.bands.every(b => b.status === 'matched' && b.evidenceUrl.startsWith(b.sourceUrl + '/')));
+    for (const field of [zoned.listing.saleStatus, zoned.listing.askingPriceUsd]) {
+      if (field.verification === 'verified') assert.ok(field.value && field.sourceUrl && field.sourceUpdatedAt && field.checkedAt);
+      else assert.ok(field.value === null && field.reason);
+    }
+    const building = await call('check_home_facts', {address:'1800 SW 3rd St', zip:'33135'});
+    assert.equal(building.schoolAssignment.status, 'unverified');
+    assert.ok(building.schoolAssignment.bands.every(b => b.schoolName === null));
+    console.log('2026–27 live address, zone sources, dated listing evidence or abstention, and ambiguous unit verified.');
+  }
   for (const [name, args] of [['search_homes', {}], ['search_homes', {minPrice: 2, maxPrice: 1}],
     ['compare_nearby_schools', {homeIds: ['unknown-home']}], ['check_home_facts', {homeId:'missing'}],
     ['check_home_facts', {homeId:matches.homes[0].id, zip:'33133'}]]) {

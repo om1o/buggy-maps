@@ -32,12 +32,17 @@ export const homeFactsOutput = z.object({
 
 export async function checkHomeFacts(homes, args, {listingConfig = {}, fetchImpl = fetch, now = new Date()} = {}) {
   const input = homeFactsInput.parse(args);
-  const {homeId} = input;
-  const combined = input.address?.match(/^(.+?)(?:\s*,\s*(?:ZIP\s+)?|\s+ZIP\s+)(\d{5})$/i);
+  if (input.homeId && (input.address !== undefined || input.zip !== undefined)) {
+    throw new Error('Supply one home reference at a time.');
+  }
+  // Some clients put a complete address in the ID slot. A numbered street and delimited ZIP
+  // identify an address lookup unambiguously. Partial street strings never select a home.
+  const combined = (input.address ?? input.homeId)?.match(/^(\d[\dA-Za-z/-]* [^\p{C}]+?)(?:\s*,\s*(?:ZIP\s+)?|\s+ZIP\s+)(\d{5})$/iu);
+  const homeId = combined ? undefined : input.homeId;
   const address = combined ? combined[1].trim() : input.address;
   const zip = input.zip ?? combined?.[2];
   if (combined && input.zip && input.zip !== combined[2]) throw new Error('The two supplied ZIP codes disagree.');
-  if (homeId ? address !== undefined || zip !== undefined : !address || !zip) {
+  if (!homeId && (!address || !zip)) {
     throw new Error('Supply a homeId alone or a street address with its five-digit ZIP.');
   }
   const subject = homeId ? homes.find(row => row.id === homeId && !row.withheld) : {id: null, address, zip, state: 'FL'};

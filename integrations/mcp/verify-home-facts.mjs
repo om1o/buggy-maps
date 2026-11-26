@@ -34,3 +34,11 @@ test('reject ambiguous selectors, incomplete addresses, unknown IDs and caller-s
     {homeId:'archive-1',token:'test'}, {address:rows[0].address,zip:'33165',sourceUrl:'https://example.com'}];
   for (const args of bad) await assert.rejects(checkHomeFacts(rows, args, unavailable));
 });
+
+test('a complete numbered street and ZIP in the ID slot are checked as an address without selecting an archive row', async () => {
+  const result = await checkHomeFacts(rows, {homeId:'5550 SW 87th Ave, ZIP 33165'}, unavailable);
+  assert.deepEqual(result.home, {id:null, address:'5550 SW 87th Ave', zip:'33165'});
+  await assert.rejects(checkHomeFacts(rows, {homeId:'5550 SW 87th Ave'}, unavailable));
+  await assert.rejects(checkHomeFacts(rows, {homeId:'missing, ZIP 33165'}, unavailable));
+  await assert.rejects(checkHomeFacts(rows, {homeId:'5550 SW 87th Ave, ZIP 33165', zip:'33135'}, unavailable));
+});
