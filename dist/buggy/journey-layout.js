@@ -7,6 +7,7 @@ const labels = {
     title: 'Plan a school trip',
     lede: 'Find your home, explore nearby schools and see the drive.',
     home: 'Find my home', schools: 'Browse schools', sample: 'Try a sample trip',
+    briefTitle:'Real estate agents', briefAction:'Build a school brief for a buyer',
     sampleTitle: 'Coconut Grove school drive', open: 'Open directions',
     credit: 'House photo · National Park Service, 2013', galleries: 'Browse homes with photo galleries',
     expand: 'More details', collapse: 'More map', expandName: 'Expand details', collapseName: 'Expand map',
@@ -16,6 +17,7 @@ const labels = {
     title: 'Planea una ruta escolar',
     lede: 'Busca tu casa, explora las escuelas cercanas y consulta el recorrido.',
     home: 'Buscar mi casa', schools: 'Ver escuelas', sample: 'Prueba una ruta',
+    briefTitle:'Agentes inmobiliarios', briefAction:'Crear una ficha de escuelas para un comprador',
     sampleTitle: 'Ruta escolar en Coconut Grove', open: 'Ver indicaciones',
     credit: 'Foto de la casa · National Park Service, 2013', galleries: 'Ver casas con galerías de fotos',
     expand: 'Ver más detalles', collapse: 'Ver más mapa', expandName: 'Ampliar detalles', collapseName: 'Ampliar mapa',
@@ -69,6 +71,7 @@ function setupJourneyLayout() {
       for (const node of start.querySelectorAll('[data-journey-key]')) {
         node.textContent = copy[node.dataset.journeyKey];
       }
+      document.getElementById('journey-agent-brief').href='./client-brief.html'+(locale==='es'?'?lang=es':'');
       // The map-area controller may replace the button contents with its own
       // label after a filter is selected; preserve its state and event handlers.
       const searchArea = document.getElementById('search-area');

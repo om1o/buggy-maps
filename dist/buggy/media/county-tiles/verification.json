@@ -1,0 +1,23 @@
+{
+  "records_checked": 33588,
+  "tiles_checked": 125,
+  "all_sha256_matched": true,
+  "all_dimensions": [
+    2560,
+    2560
+  ],
+  "property_crop_dimensions_native_px": [
+    432,
+    288
+  ],
+  "property_crop_extent_projected_m": [
+    216,
+    144
+  ],
+  "out_of_bounds_crops": 0,
+  "minimum_center_edge_margin_px": 256.0078736804426,
+  "minimum_crop_grayscale_stddev": 26.55259329584104,
+  "minimum_crop_variance_folio": "0141200120470",
+  "low_variance_crops": [],
+  "scope": "Complete geometric, checksum, decode, and pixel-variance verification. No claim of individual visual/address validation for every record."
+}

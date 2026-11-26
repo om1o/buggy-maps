@@ -1,0 +1,324 @@
+json_path,observed_types,homes_with_path_including_null
+abbreviatedAddress,str,1000
+address,dict,1000
+address.city,str,1000
+address.state,str,1000
+address.streetAddress,str,1000
+address.zipcode,str,1000
+availability_date,NoneType,1000
+base_rent,NoneType,1000
+bathrooms,int,1000
+bedrooms,int,1000
+brokerageName,str,19
+city,str,1000
+citySearchUrl,dict,1000
+citySearchUrl.path,str,1000
+citySearchUrl.text,str,1000
+climate_risks,NoneType,1000
+community_details,"NoneType, list",1000
+community_details[].title,str,991
+community_details[].values,list,991
+construction,list,1000
+construction[].title,str,1000
+construction[].values,list,1000
+contingent_listing_type,NoneType,1000
+country,str,1000
+county,str,19
+countyFIPS,"NoneType, str",1000
+countyID,str,1000
+currency,str,1000
+dateSold,str,833
+dateSoldString,str,833
+daysOnZillow,int,1000
+days_on_zillow,int,1000
+discovery_input,dict,1000
+discovery_input.url,str,1000
+financial,NoneType,1000
+financial_listing_details,NoneType,1000
+getting_around,dict,1000
+getting_around.bike,"NoneType, dict",1000
+getting_around.bike.description,str,997
+getting_around.bike.score,int,997
+getting_around.transit,dict,1000
+getting_around.transit.description,str,1000
+getting_around.transit.score,int,1000
+getting_around.walk,dict,1000
+getting_around.walk.description,str,1000
+getting_around.walk.score,int,1000
+getting_around_scores,dict,1000
+getting_around_scores.bike_score,"NoneType, str",1000
+getting_around_scores.transit_score,str,1000
+getting_around_scores.walk_score,str,1000
+hasApprovedThirdPartyVirtualTourUrl,bool,982
+hasBadGeocode,bool,19
+hasPublicVideo,bool,1
+has_3d_tour,bool,1000
+hdpTypeDimension,str,1000
+hdpUrl,str,1000
+hideZestimate,str,1
+hoa_details,dict,1000
+hoa_details.amenities_included,"NoneType, list",1000
+hoa_details.has_hoa,"NoneType, bool",981
+hoa_details.hoa_fee_currency,"NoneType, str",981
+hoa_details.hoa_fee_period,"NoneType, str",981
+hoa_details.hoa_fee_value,"NoneType, int",981
+hoa_details.hoa_name,NoneType,981
+hoa_details.services_included,"NoneType, list",1000
+homeStatus,str,1000
+homeType,str,1000
+homeValuation,list,999
+homeValuation[].comparables,"NoneType, dict",999
+homeValuation[].comparables.comps,list,962
+homeValuation[].comparables.comps[].property,"NoneType, dict",962
+homeValuation[].comparables.comps[].property.address,dict,959
+homeValuation[].comparables.comps[].property.address.city,str,959
+homeValuation[].comparables.comps[].property.address.state,str,959
+homeValuation[].comparables.comps[].property.address.streetAddress,str,959
+homeValuation[].comparables.comps[].property.address.zipcode,str,959
+homeValuation[].comparables.comps[].property.attributionInfo,dict,959
+homeValuation[].comparables.comps[].property.attributionInfo.brokerName,"NoneType, str",959
+homeValuation[].comparables.comps[].property.attributionInfo.mlsId,"NoneType, str",959
+homeValuation[].comparables.comps[].property.attributionInfo.mlsName,"NoneType, str",959
+homeValuation[].comparables.comps[].property.bathrooms,"NoneType, float, int",959
+homeValuation[].comparables.comps[].property.bedrooms,"NoneType, int",959
+homeValuation[].comparables.comps[].property.currency,str,959
+homeValuation[].comparables.comps[].property.dateSold,"NoneType, int",959
+homeValuation[].comparables.comps[].property.daysOnZillow,"NoneType, int",959
+homeValuation[].comparables.comps[].property.hdpUrl,str,959
+homeValuation[].comparables.comps[].property.homeStatus,str,959
+homeValuation[].comparables.comps[].property.homeType,str,959
+homeValuation[].comparables.comps[].property.isUndisclosedAddress,bool,959
+homeValuation[].comparables.comps[].property.lastSoldPrice,"NoneType, int",959
+homeValuation[].comparables.comps[].property.latitude,"NoneType, float",959
+homeValuation[].comparables.comps[].property.listing_sub_type,dict,959
+homeValuation[].comparables.comps[].property.listing_sub_type.is_FSBO,bool,959
+homeValuation[].comparables.comps[].property.listing_sub_type.is_bankOwned,bool,959
+homeValuation[].comparables.comps[].property.listing_sub_type.is_comingSoon,bool,959
+homeValuation[].comparables.comps[].property.listing_sub_type.is_forAuction,bool,959
+homeValuation[].comparables.comps[].property.listing_sub_type.is_foreclosure,bool,959
+homeValuation[].comparables.comps[].property.listing_sub_type.is_newHome,bool,959
+homeValuation[].comparables.comps[].property.livingAreaUnits,"NoneType, str",959
+homeValuation[].comparables.comps[].property.livingAreaUnitsShort,"NoneType, str",959
+homeValuation[].comparables.comps[].property.livingAreaValue,"NoneType, int",959
+homeValuation[].comparables.comps[].property.longitude,"NoneType, float",959
+homeValuation[].comparables.comps[].property.lotAreaUnits,str,959
+homeValuation[].comparables.comps[].property.lotAreaValue,"NoneType, float, int",959
+homeValuation[].comparables.comps[].property.price,int,959
+homeValuation[].comparables.comps[].property.zestimate,"NoneType, int",959
+homeValuation[].comparables.comps[].property.zpid,int,959
+input,dict,1000
+input.url,str,1000
+interior,dict,1000
+interior.bedrooms_and_bathrooms,dict,1000
+interior.bedrooms_and_bathrooms.bathrooms,int,1000
+interior.bedrooms_and_bathrooms.bedrooms,int,1000
+interior.bedrooms_and_bathrooms.full_bathrooms,int,1000
+interior.bedrooms_and_bathrooms.half_bathroom,str,1000
+interior.flooring,str,925
+interior.heating,str,996
+interior.kitchen,dict,3
+interior.kitchen.features,str,3
+interior.other_interior_features,str,986
+interior_full,list,1000
+interior_full[].title,str,1000
+interior_full[].values,list,1000
+isCurrentSignedInAgentResponsible,str,19
+isCurrentSignedInUserVerifiedOwner,str,19
+isFeatured,bool,1
+isHousingConnector,bool,1
+isInstantOfferEnabled,str,1000
+isListingClaimedByCurrentSignedInUser,str,19
+isNonOwnerOccupied,str,1
+isOffMarket,bool,1000
+isPremierBuilder,str,1000
+isRentalListingOffMarket,str,1
+isRentalsLeadCapMet,bool,1
+isUndisclosedAddress,str,1000
+isVerifiedClaimedByCurrentSignedInUser,str,1000
+isZillowOwned,str,1
+is_flipped_within_12_months,bool,1000
+is_listed_by_management_company,bool,1000
+is_showcased,bool,1000
+lastSoldPrice,int,833
+latitude,float,1000
+listingDataSource,str,999
+listingTypeDimension,str,1000
+listing_provided_by,dict,1000
+listing_provided_by.company,"NoneType, str",1000
+livingArea,int,986
+livingAreaUnits,str,19
+livingAreaUnitsShort,str,19
+livingAreaValue,int,986
+longitude,float,1000
+lotAreaUnits,str,1000
+lotAreaValue,"float, int",969
+lotSize,int,969
+mls_id,"NoneType, str",1000
+mortgageRates,dict,989
+mortgageRates.thirtyYearFixedRate,float,989
+nearbyCities,list,1000
+nearbyCities[].name,str,1000
+nearbyCities[].regionUrl,dict,1000
+nearbyCities[].regionUrl.path,str,1000
+nearbyHomes,list,1000
+nearbyHomes[].address,dict,1000
+nearbyHomes[].address.city,str,1000
+nearbyHomes[].address.state,str,1000
+nearbyHomes[].address.streetAddress,str,1000
+nearbyHomes[].address.zipcode,str,1000
+nearbyHomes[].attributionInfo,dict,570
+nearbyHomes[].attributionInfo.brokerName,NoneType,1
+nearbyHomes[].attributionInfo.mlsId,"NoneType, str",570
+nearbyHomes[].attributionInfo.mlsName,NoneType,1
+nearbyHomes[].attributionInfo.trueStatus,NoneType,1
+nearbyHomes[].baseRent,NoneType,1
+nearbyHomes[].bathrooms,"float, int",1000
+nearbyHomes[].bedrooms,int,1000
+nearbyHomes[].currency,str,1000
+nearbyHomes[].formattedChip,dict,1000
+nearbyHomes[].formattedChip.location,list,1000
+nearbyHomes[].hdpTypeDimension,str,1000
+nearbyHomes[].hdpUrl,str,1000
+nearbyHomes[].homeStatus,str,1000
+nearbyHomes[].homeType,str,1000
+nearbyHomes[].isPremierBuilder,bool,1000
+nearbyHomes[].isSavedByCurrentSignedInUser,bool,999
+nearbyHomes[].isShowcaseListing,bool,1000
+nearbyHomes[].latitude,float,1000
+nearbyHomes[].listPriceIncludesRequiredMonthlyFees,NoneType,1
+nearbyHomes[].listingMetadata,dict,1000
+nearbyHomes[].listingMetadata.comminglingCategoryIsRulesApplicable,bool,1000
+nearbyHomes[].listingTypeDimension,str,1000
+nearbyHomes[].listing_sub_type,dict,1000
+nearbyHomes[].listing_sub_type.is_FSBA,bool,1000
+nearbyHomes[].listing_sub_type.is_FSBO,bool,1000
+nearbyHomes[].listing_sub_type.is_bankOwned,bool,1000
+nearbyHomes[].listing_sub_type.is_comingSoon,bool,1000
+nearbyHomes[].listing_sub_type.is_forAuction,bool,1000
+nearbyHomes[].listing_sub_type.is_foreclosure,bool,1000
+nearbyHomes[].listing_sub_type.is_newHome,bool,1000
+nearbyHomes[].livingArea,int,1000
+nearbyHomes[].livingAreaUnits,str,1000
+nearbyHomes[].livingAreaUnitsShort,str,1000
+nearbyHomes[].livingAreaValue,int,1000
+nearbyHomes[].longitude,float,1000
+nearbyHomes[].lotAreaUnits,str,1000
+nearbyHomes[].lotAreaValue,"NoneType, float, int",993
+nearbyHomes[].lotSize,"NoneType, int",993
+nearbyHomes[].newConstructionType,"NoneType, str",10
+nearbyHomes[].parentRegion,NoneType,1
+nearbyHomes[].price,int,1000
+nearbyHomes[].propertyTypeDimension,str,1000
+nearbyHomes[].providerListingID,"NoneType, str",328
+nearbyHomes[].resoFacts,dict,1
+nearbyHomes[].resoFacts.bathroomsFull,NoneType,1
+nearbyHomes[].resoFacts.bathroomsHalf,NoneType,1
+nearbyHomes[].resoFacts.bathroomsOneQuarter,NoneType,1
+nearbyHomes[].resoFacts.bathroomsThreeQuarter,NoneType,1
+nearbyHomes[].state,str,1000
+nearbyHomes[].totalRequiredMonthlyMaxFee,NoneType,1
+nearbyHomes[].totalRequiredMonthlyMinFee,NoneType,1
+nearbyHomes[].zpid,int,1000
+nearbyNeighborhoods,list,1000
+nearbyNeighborhoods[].name,str,1000
+nearbyNeighborhoods[].regionUrl,dict,1000
+nearbyNeighborhoods[].regionUrl.path,str,1000
+nearbyZipcodes,list,1000
+nearbyZipcodes[].name,str,1000
+nearbyZipcodes[].regionUrl,dict,1000
+nearbyZipcodes[].regionUrl.path,str,1000
+num_of_applications,NoneType,1000
+num_of_contacts,NoneType,1000
+open_house_details,"NoneType, list",1000
+open_house_details[].add_to_calendar_link,NoneType,1
+open_house_details[].open_house_date,str,1
+open_house_details[].open_house_day,str,1
+open_house_details[].open_house_end_time,int,1
+open_house_details[].open_house_start_time,int,1
+originating_mls,"NoneType, str",1000
+other,NoneType,1000
+overview,dict,1000
+overview.days_on_zillow,int,1000
+overview.number_of_saves,int,993
+overview.number_of_views,int,1000
+parcelId,str,998
+payment_breakdown,list,1000
+payment_breakdown[].name,str,1000
+payment_breakdown[].value,str,1000
+photoCount,int,1000
+price,int,1000
+priceHistory,list,1000
+priceHistory[].attributeSource,dict,1000
+priceHistory[].attributeSource.infoString2,str,1000
+priceHistory[].date,str,1000
+priceHistory[].event,str,1000
+priceHistory[].postingIsRental,bool,1000
+priceHistory[].price,int,1000
+priceHistory[].priceChangeRate,"float, int",1000
+priceHistory[].pricePerSquareFoot,int,979
+priceHistory[].showCountyLink,bool,1000
+priceHistory[].source,str,1000
+priceHistory[].source_listing_id,"NoneType, str",1000
+priceHistory[].source_name,"NoneType, str",1000
+priceHistory[].time,int,1000
+property,list,1000
+propertyTaxRate,float,1000
+propertyTypeDimension,str,1000
+property[].title,str,1000
+property[].values,list,1000
+publish_url,NoneType,1000
+rentZestimate,int,471
+rentalApplicationsAcceptedType,str,1
+resoFacts:sewer,str,982
+resoFacts:waterSource,str,982
+resofacts_sewer,str,982
+resofacts_water_source,str,982
+restimateHighPercent,str,1
+restimateLowPercent,str,1
+restimateMinus30,str,10
+schools,list,1000
+schools[].distance,"float, int",1000
+schools[].grades,str,1000
+schools[].level,str,1
+schools[].link,str,1000
+schools[].name,str,1000
+schools[].rating,int,1000
+schools[].type,str,1
+selfTour,dict,1000
+selfTour.hasSelfTour,bool,1000
+sold_to_list_ratio,"NoneType, float, int",1000
+sold_to_zestimate_ratio,"NoneType, float",1000
+special_offer,NoneType,1000
+sqft,NoneType,1000
+ssid,int,989
+state,str,1000
+streetAddress,str,1000
+tag,NoneType,1000
+tags,"NoneType, list",1000
+taxAssessedValue,int,959
+taxAssessedYear,int,959
+taxHistory,list,959
+taxHistory[].taxPaid,"float, int",959
+taxHistory[].time,int,959
+taxHistory[].value,int,959
+taxHistory[].valueIncreaseRate,"float, int",959
+timeZone,str,1000
+timestamp,str,1000
+tourEligibility,dict,981
+tourEligibility.isPropertyTourEligible,bool,981
+tourViewCount,int,1000
+unit_amenities,NoneType,1000
+unit_number,NoneType,1000
+url,str,1000
+utilities,list,1000
+yearBuilt,int,1000
+zestimate,int,413
+zestimateHighPercent,str,413
+zestimateLowPercent,str,413
+zestimateMinus30,str,8
+zestimate_history,list,917
+zestimate_history[].amount,"float, int",900
+zestimate_history[].as_of_date,"NoneType, str",917
+zestimate_history[].date,int,900
+zipcode,str,1000
+zpid,int,1000

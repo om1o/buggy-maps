@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Buggy Maps school tools",
+  "description": "Logical inputs to two local CLI commands. Each command reads a school directory snapshot. A successful command prints one JSON object.",
+  "oneOf": [
+    {"$ref": "#/$defs/searchInput"},
+    {"$ref": "#/$defs/briefInput"}
+  ],
+  "examples": [
+    {"command": "search", "query": "Coconut Grove", "limit": 6, "language": "en"},
+    {"command": "brief", "schoolIds": ["fl-13-0841", "fl-13-6741"], "language": "es"}
+  ],
+  "x-cli": {
+    "search": {
+      "example": "node scripts/agent-schools.mjs search --query \"Coconut Grove\" --limit 6 --language en",
+      "response": "#/$defs/searchResult"
+    },
+    "brief": {
+      "example": "node scripts/agent-schools.mjs brief --school fl-13-0841 --school fl-13-6741 --language es",
+      "response": "#/$defs/briefResult"
+    },
+    "snapshot": "Default: dist/buggy/data/schools.json relative to the installation. Supply --directory FILE to read another local snapshot.",
+    "failure": {"exitCode": 1, "stream": "stderr", "response": "#/$defs/errorResult"}
+  },
+  "x-web": {
+    "dataDownloadsRelativeToDescriptor": {
+      "coverage": "data/coverage.json",
+      "allPropertyRows": "data/Buggy_Miami_Properties.csv",
+      "fullPropertyCollection": "data/Buggy_Property_Data.zip",
+      "sourceSnapshots": "data/Buggy_Map_Source_Snapshots.zip",
+      "schoolDirectory": "data/schools.json",
+      "schoolSpreadsheet": "data/Miami-Dade-Schools.csv",
+      "schoolSources": "data/school-sources.txt",
+      "schoolImageCredits": "data/school-image-credits.csv",
+      "mapAndRoutingSources": "map-assets/SOURCES.txt",
+      "researchArchive": "../report/"
+    },
+    "directory": "https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/data/schools.json",
+    "localDirectoryRelativeToDescriptor": "data/schools.json",
+    "rows": "schools",
+    "campusFilter": {"campusType": "campus"},
+    "instructions": "GET the public directory and search it locally. Resolve each chosen ID against a physical campus record. Build a fresh public URL from the canonical base. Include only school mode, selected directory IDs and optional Spanish language.",
+    "baseUrl": "https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/",
+    "singleExample": "https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/?mode=schools&school=fl-13-0841",
+    "multipleExample": "https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/?mode=schools&campuses=fl-13-0841%2Cfl-13-6741&lang=es",
+    "districtLocator": "https://app.guidek12.com/miami/school_search/current/"
+  },
+  "$defs": {
+    "language": {"type": "string", "enum": ["en", "es"], "default": "en"},
+    "schoolId": {"type": "string", "maxLength": 80, "pattern": "^(?:fl-(?:private-)?[0-9]{2}-[0-9]{4}|nces-[0-9]{12}|campus-[a-z0-9]+(?:-[a-z0-9]+)*)$"},
+    "school": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "grades", "type", "address", "city", "state", "zip", "website", "sourceUrl"],
+      "properties": {
+        "id": {"$ref": "#/$defs/schoolId"},
+        "name": {"type": "string"},
+        "grades": {"type": "string"},
+        "type": {"type": "string"},
+        "address": {"type": "string", "description": "Published school street address."},
+        "city": {"type": "string"},
+        "state": {"type": "string"},
+        "zip": {"type": "string"},
+        "website": {"type": "string"},
+        "sourceUrl": {"type": "string"}
+      }
+    },
+    "searchInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "query"],
+      "properties": {
+        "command": {"const": "search"},
+        "query": {"type": "string", "pattern": "\\S", "description": "School name, alias, or ZIP."},
+        "limit": {"type": "integer", "minimum": 1, "maximum": 20, "default": 6},
+        "language": {"$ref": "#/$defs/language"}
+      }
+    },
+    "briefInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "schoolIds"],
+      "properties": {
+        "command": {"const": "brief"},
+        "schoolIds": {"type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": true, "items": {"$ref": "#/$defs/schoolId"}},
+        "language": {"$ref": "#/$defs/language"}
+      }
+    },
+    "searchResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "schools"],
+      "properties": {
+        "language": {"$ref": "#/$defs/language"},
+        "schools": {"type": "array", "maxItems": 20, "items": {"$ref": "#/$defs/school"}}
+      }
+    },
+    "briefResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "schools", "shareUrl", "districtLocator"],
+      "properties": {
+        "language": {"$ref": "#/$defs/language"},
+        "schools": {"type": "array", "minItems": 1, "maxItems": 3, "items": {"$ref": "#/$defs/school"}},
+        "shareUrl": {"type": "string", "format": "uri"},
+        "districtLocator": {"type": "string", "format": "uri"}
+      }
+    },
+    "errorResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["error"],
+      "properties": {"error": {"type": "string", "minLength": 1}}
+    }
+  }
+}

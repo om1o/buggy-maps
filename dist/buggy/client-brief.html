@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#ffffff">
+  <title>School brief | Buggy Maps</title>
+  <link rel="icon" href="./assets/buggy-icon.png">
+  <link rel="stylesheet" href="./client-brief.css">
+  <link rel="help" type="application/json" href="./agent-tools.json" title="Buggy Maps AI agent tools">
+  <script type="module" src="./client-brief.js"></script>
+</head>
+<body data-own-language>
+  <a class="skip-link" href="#builder" data-i18n="skip">Skip to brief builder</a>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <img class="logo" src="./assets/buggy-logo.png" width="287" height="100" alt="Buggy">
+      <nav class="top-actions">
+        <a id="brief-back" href="./"><span aria-hidden="true">←</span> <span data-i18n="back">Back to map</span></a>
+        <button id="brief-language" type="button" lang="es">Español</button>
+      </nav>
+    </div>
+  </header>
+  <main id="builder" class="wrap" tabindex="-1">
+    <div class="intro">
+      <h1 data-i18n="title">School brief</h1>
+      <p data-i18n="intro">Choose up to three Miami-Dade schools to share with a client.</p>
+    </div>
+    <div class="workspace">
+      <section class="picker" aria-labelledby="picker-heading">
+        <h2 id="picker-heading" data-i18n="searchHeading">Choose schools</h2>
+        <label for="brief-search" data-i18n="searchLabel">Search the school directory</label>
+        <div class="search-field">
+          <input type="search" id="brief-search" autocomplete="off" spellcheck="false" aria-controls="brief-results">
+        </div>
+        <p id="brief-status" class="status" role="status"></p>
+        <button id="brief-retry" type="button" data-i18n="retry" hidden>Try again</button>
+        <ul id="brief-results" class="results"></ul>
+      </section>
+      <section class="sheet" aria-labelledby="sheet-heading">
+        <header class="sheet-head">
+          <h2 id="sheet-heading" data-i18n="sheetHeading">Selected schools</h2>
+          <span id="brief-count"></span>
+        </header>
+        <p id="brief-empty" data-i18n="empty">The schools you choose will appear here.</p>
+        <button type="button" id="brief-example" data-i18n="example" disabled>Try the Coconut Grove example</button>
+        <ol id="brief-selected"></ol>
+        <p id="brief-date" class="brief-facts" hidden></p>
+        <p class="scope"><span data-i18n="scope">Use the district locator to check school assignment. Confirm enrollment with the school and ride availability with Buggy.</span> <a id="brief-locator" data-i18n="locator" target="_blank" rel="noopener noreferrer">District school locator</a></p>
+        <div class="sheet-actions">
+          <a id="brief-share" aria-disabled="true" data-i18n="openMap">Open school map</a>
+          <button id="brief-copy" type="button" disabled data-i18n="copy">Copy map link</button>
+          <button id="brief-print" type="button" disabled data-i18n="print">Print brief</button>
+        </div>
+        <label class="visually-hidden" for="brief-copy-fallback" data-i18n="copyFallback">School map link</label>
+        <input type="url" id="brief-copy-fallback" readonly hidden>
+        <p id="brief-action-status" class="status" role="status"></p>
+      </section>
+    </div>
+  </main>
+  <footer class="wrap"><a href="./agent-tools.json" data-i18n="tools">AI tools</a></footer>
+</body>
+</html>

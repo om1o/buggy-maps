@@ -1,0 +1,71 @@
+Buggy · Miami-Dade school directory
+Snapshot taken November 23, 2026
+
+Coverage
+
+The directory contains 1,190 school and program records. There are 357 noncharter public schools and programs, 160 charter schools and 673 private schools and campuses. Private and public institutions may use the same building. Separate programs with different registration numbers retain their own entries.
+
+The 2026–27 Florida Master School ID file had 547 active entries with a physical district of Miami-Dade. The directory kept 516 after removing 16 adult-only schools, four preschool-only entries and 11 administrative or unassigned records. The federal Miccosukee Indian School appears separately, with its address checked against the school's own contact page and its county location confirmed by NCES.
+
+Florida's Miami-Dade private school directory returned 677 annual-survey records. Three preschool-only entries and six entries with physical addresses in other counties were excluded, leaving 668. Five additional campuses have direct school documentation. These include Ransom Everglades Middle School, Gulliver's Marian C. Krutulis campus, Carrollton's Barat and Duchesne campuses and Palmer Trinity School. The Ransom Everglades and Gulliver upper-school records are labeled separately. Private schools self-report to Florida. Schools that did not report, new branches and recent moves can be missing.
+
+Campus locations
+
+1,147 entries have mapped locations. Of these, 913 match county school sites, 199 match county street-address points, 28 use U.S. Census street-address locations and seven use NCES school locations (two public and five private). The county school-site match uses the physical address and ZIP or the corresponding school ID and exact street. Selected address corrections link to the school that published them.
+
+43 entries remain in search without a map point. These include 17 virtual schools, five specialized hospital or justice education programs and 21 campuses without a confirmed location. A street-address point can fall on the street or elsewhere on the property. Families should confirm an appropriate pickup location with the school or Buggy. These records describe schools and programs. Buggy confirms transportation availability separately.
+
+Directory fields
+
+schools.json includes the school's name, public street address when applicable, city, state, ZIP, school type, published grades and phone, school website when supplied, record ID, source link, campus type, aliases and available coordinates. There are 1,188 published phone numbers, 1,184 grade spans and 1,025 published school website links. Some links and contact details were reported by the schools and may have changed since the source was updated. A missing field indicates that this snapshot lacks a usable value.
+
+The Florida public IDs contain the reporting district and state school number. Florida private IDs contain the district and private school registration number. Entries with an NCES prefix use the federal identifier. Entries with a campus prefix identify supplemental, school-published locations.
+
+Images
+
+17 school profiles display credited photographs of school buildings. The credit and original source link identify the photographer, license, date when known and any size or crop change. Historical views are labeled with their date or identified as historic. school-image-credits.csv includes the same attribution information.
+
+The other 1,130 mapped profiles use Miami-Dade County aerial photography, centered on the mapped school or its published address. The frame covers several blocks, and the imagery can predate a move or construction. The county describes the service as 2025 imagery and lists 2024 in its map details. No individual photograph has been assigned a capture date. Each aerial has a locally packaged 160 × 96 pixel preview of the same view. Coconut Grove Elementary also includes a locally packaged 600 × 360 pixel view. The 43 records without coordinates have no image. The county aerials are distinct from school-owned photographs and do not show an identified entrance.
+
+Official data sources
+
+Florida Department of Education · Active schools, 2026–27
+https://eds.fldoe.org/EDS/MasterSchoolID/Downloads/Active_schools.cfm
+
+Florida Department of Education · Private Schools Directory, Miami-Dade district 13
+https://web09.fldoe.org/PrivateSchoolDirectory/
+
+Miami-Dade County · MD Educational GIS, public, charter and private school layers
+https://gisweb.miamidade.gov/arcgis/rest/services/CommunityServices/MD_Educational/MapServer
+
+Miami-Dade County · Physical address locator
+https://gisms.miamidade.gov/arcgis/rest/services/MDC_LocatorsPro/GeoAddress/GeocodeServer
+
+U.S. Census Bureau · Street address geocoding
+https://www.census.gov/data/developers/data-sets/Geocoding-services.html
+
+National Center for Education Statistics · EDGE public school locations, 2024–25
+https://nces.ed.gov/opengis/rest/services/K12_School_Locations/EDGE_GEOCODE_PUBLICSCH_2425/MapServer/0
+
+National Center for Education Statistics · EDGE private school locations, 2023–24
+https://nces.ed.gov/opengis/rest/services/K12_School_Locations/EDGE_GEOCODE_PRIVATESCH_2324/MapServer/0
+
+Miccosukee Indian School · School contact and location
+https://www.miccosukeeindianschool.com/contact-8
+
+Miami-Dade County · Aerial imagery service
+https://gisweb.miamidade.gov/arcgis/rest/services/MapCache/MDCImagery_WebMercator/MapServer
+
+Additional campus sources
+
+Ransom Everglades School
+https://www.ransomeverglades.org/about/contacts-and-directions
+
+Gulliver Preparatory School
+https://www.gulliverprep.org/about/campus-facilities/
+
+Carrollton School of the Sacred Heart
+https://www.carrollton.org/admissions/visit-us
+
+Palmer Trinity School
+https://www.palmertrinity.org/contact

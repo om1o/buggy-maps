@@ -1,4 +1,4 @@
-"""Run the local Buggy Maps preview from the portable bundle or a Sites checkout."""
+"""Run the local Buggy Maps preview with the included Miami-Dade data."""
 import argparse
 from contextlib import ExitStack
 from functools import partial
@@ -15,14 +15,14 @@ ROOT = Path(__file__).resolve().parent
 CHECKS = (
     "home-choice", "place-discovery", "property-search", "public-sharing",
     "trip-location", "commute-workspace", "parent-booking", "trip-road-network",
-    "school-directory", "buggy-school-links",
+    "school-directory", "buggy-school-links", "agent-schools",
 )
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, help="Authorized Sites Git checkout containing v14")
-    parser.add_argument("--check", action="store_true", help="Run the ten Node verification scripts and exit")
+    parser.add_argument("--check", action="store_true", help="Run the Node verification scripts and exit")
     parser.add_argument("--no-browser", action="store_true", help="Print the local URL without opening a tab")
     args = parser.parse_args()
 
@@ -38,7 +38,7 @@ def main():
             shutil.copytree(ROOT / "dist", app / "dist", dirs_exist_ok=True)
             shutil.copytree(ROOT / "scripts", app / "scripts")
         if not (app / "dist/buggy/data/index.json").is_file():
-            parser.error("This source copy needs the v14 data. Pass --source PATH or use the extracted portable bundle.")
+            parser.error("The school and property snapshot is missing. Restore the dist directory from Git or extract the entire bundle.")
         if args.check:
             for name in CHECKS:
                 subprocess.run(["node", f"scripts/verify-{name}.mjs"], cwd=app, check=True)

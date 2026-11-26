@@ -3,14 +3,14 @@ const norm = value => String(value || '').normalize('NFD').replace(/[\u0300-\u03
 const schoolWords = {escuela:'school',escuelas:'school',primaria:'elementary',intermedia:'middle',secundaria:'high',preparatoria:'high',privada:'private',privadas:'private',publica:'public',publicas:'public',colegio:'school',academia:'academy',chárter:'charter',suroeste:'sw',sureste:'se',noroeste:'nw',noreste:'ne'};
 const ignored=new Set(['en','de','la','las','el','the','in','at','of','near','me','cerca','school','schools']);
 const toWords = value => norm(value).split(' ').map(w=>schoolWords[w] || w).filter(w=>w && !ignored.has(w));
-export function createSchoolDirectory() {
-  let list=[], byId=new Map(), ready=false, pending;
+export function createSchoolDirectory(loadDirectory = () => loadJSON('data/schools.json',{timeoutMs:18000})) {
+  let list=[], byId=new Map(), ready=false, pending, retrievedAt='';
   async function load() {
     if(ready) return list;
     if(pending) return pending;
     pending=(async()=>{
       try {
-        const data=await loadJSON('data/schools.json',{timeoutMs:18000});
+        const data=await loadDirectory();
         if(!Array.isArray(data.schools) || !data.schools.length) throw Error('School directory unavailable');
         const next=new Map();
         for(const school of data.schools) {
@@ -20,7 +20,7 @@ export function createSchoolDirectory() {
           school._tokens=new Set(school._search.split(' ')); next.set(school.id,school);
         }
         if(!next.size) throw Error('School directory unavailable');
-        byId=next;list=[...next.values()];ready=true;
+        byId=next;list=[...next.values()];retrievedAt=data.retrievedAt || '';ready=true;
         return list;
       } finally {pending=null;}
     })();
@@ -39,5 +39,5 @@ export function createSchoolDirectory() {
     }
     return ranked.sort((a,b)=>b.score-a.score||a.school.name.localeCompare(b.school.name)).map(x=>x.school);
   }
-  return {load,search,get:id=>byId.get(id),get ready(){return ready;},get all(){return list;}};
+  return {load,search,get:id=>byId.get(id),get ready(){return ready;},get all(){return list;},get retrievedAt(){return retrievedAt;}};
 }

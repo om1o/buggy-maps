@@ -4,15 +4,17 @@ Plan a Miami-Dade school drive, compare campuses, calculate a departure time, an
 
 ## Run the map
 
-**Portable bundle.** Extract the entire ZIP and double-click **Start Buggy Maps.cmd** on Windows. On other platforms run `python run.py`. The launcher requires Python 3.8 or newer, opens the map in a browser, and serves the app on this computer. Press Ctrl+C in the terminal to stop. The bundle includes the original map data and credits. The research-report link opens the published report.
+Clone this repository or extract the entire portable ZIP. On Windows, double-click **Start Buggy Maps.cmd**. On other platforms run `python run.py`. The launcher requires Python 3.8 or newer and opens the map in a browser. Press Ctrl+C in the terminal to stop.
 
-**GitHub source.** This repository contains the caregiver interface, search and routing code, and verification scripts. Use an authorized checkout of the original Miami Home Archive Sites project for its release datasets, licensed images, operator configuration and linked archive. Run from the GitHub clone with Python and Git installed.
+The `dist/` directory contains the published map, property records, school directory, local imagery, routing graph and linked research archive. File-level credits accompany the school and map assets. Publisher-hosted tours and optional external services keep their original links.
 
-```sh
-python run.py --source "/path/to/miami-home-archive"
-```
+The source snapshot download includes the eight original data inputs and the county acquisition notes. [Download the source snapshots](dist/buggy/data/Buggy_Map_Source_Snapshots.zip)
 
-The launcher reads commit `1e59168aee46ed867bc988107d922e534384dc50` (v14) from the supplied checkout into a temporary directory, then overlays the code in this repository. The original checkout can be on any branch containing the commit object. Its working files stay untouched.
+## Prepare a client school brief
+
+Choose **Real estate agents** on the map. Search for a campus by name, city or ZIP, then add up to three schools. Each printable brief includes public campus details and source links. Copy the school map link to share just those campuses. [Open the school brief](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/client-brief.html)
+
+AI assistants can search the included directory and generate the same brief from confirmed school IDs. Run `node scripts/agent-schools.mjs search --query "Coconut Grove"` to see candidates and `node scripts/agent-schools.mjs brief --school fl-13-0841 --school fl-13-6741` to build a brief. [AI agent guide](docs/AI-AGENTS.md) · [Machine-readable tool and data links](dist/buggy/agent-tools.json)
 
 ## Verify
 
@@ -22,7 +24,7 @@ The bilingual regression suite uses Node.js 24 and the production ranker and pla
 node scripts/verify-home-choice.mjs
 ```
 
-For the complete checks, run `python run.py --check` in the extracted bundle, or `python run.py --source "/path/to/miami-home-archive" --check` in the GitHub clone. These commands also check discovery, property search, school-only sharing, trip history, arrival planning, booking links, the road graph and the school directory.
+For the complete checks, run `python run.py --check` from the clone or extracted bundle. The checks cover the agent commands, discovery, property search, sharing, trip history, arrival planning, booking links, the road graph and the school directory.
 
 ## Product checks
 

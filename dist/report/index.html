@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Miami houses on Zillow and Homes.com</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    main{max-width:1140px}
+    h1{font-size:clamp(34px,4.8vw,62px)}
+    .intro{padding-top:36px;padding-bottom:10px}
+    .deck{margin-top:22px}
+    figcaption{gap:18px;flex-wrap:wrap}
+    .controls{display:flex;align-items:center;gap:10px}
+    .deck img{width:100%;height:auto;aspect-ratio:16/9}
+    .download{display:inline-block;color:#204f3f;font-weight:600}
+    .source-list{display:flex;gap:18px;flex-wrap:wrap}
+    .note{max-width:800px}
+    #browse{margin-top:30px}.records td,.records th{text-align:left}
+    .record-toolbar{display:grid;grid-template-columns:1fr 1.4fr;gap:15px;margin:18px 0 0}
+    .record-toolbar label{font-size:14px;font-weight:600}
+    .record-dialog dl{grid-template-columns:minmax(7em,1fr) 2fr}
+    .record-dialog dd,.slide-text a{overflow-wrap:anywhere}
+    .slide-text section{padding:12px 0;margin-top:16px}.slide-text h2{font-size:26px}
+    .slide-text .data{overflow:auto}.slide-text .slide-number{margin:0;font-size:13px;color:#53695f}
+    .slide-text th:last-child,.slide-text td:last-child{display:table-cell}
+    @media(max-width:580px){.record-toolbar{grid-template-columns:1fr;gap:9px}}
+    @media(max-width:560px){.intro{padding-top:23px}.controls{gap:6px}figcaption{gap:7px}.source-list{display:block}}
+    @media print{header,nav,button,.download,.source-list{display:none}}
+  </style>
+</head>
+<body>
+<header><div class="top"><a class="brand" href="../buggy/">Buggy · Property lookup</a><nav aria-label="Report"><a href="#slides">Presentation</a><a href="#browse">Property data</a><a href="#sources">Sources</a></nav></div></header>
+<main>
+  <aside style="margin-top:24px;padding:20px 24px;border:1px solid #bdd1e8;background:#eef5ff;border-radius:8px;color:#173f75" aria-label="Expanded property collection">
+    <strong>New: 34,729 searchable properties with aerial coverage on 34,724 records</strong>
+    <p>The November 22 expansion adds official single-family property records across the City of Miami, including off-market homes. The presentation below documents the earlier Zillow and Homes.com archive.</p>
+    <div class="source-list"><a href="../buggy/">Open the expanded Buggy atlas</a><a href="../buggy/data/Buggy_Miami_Properties.csv" download>Download all property rows (CSV)</a><a href="../buggy/data/Buggy_Property_Data.zip" download>Download full data and image links (ZIP)</a></div>
+  </aside>
+  <section id="slides" class="intro">
+    <p class="eyebrow">Research report · November 15, 2026</p>
+    <h1>Miami houses on Zillow and Homes.com</h1>
+    <p class="lead">Explore 1,703 property records with Miami mailing addresses or source labels. The March Zillow archive covers 1,700 properties. The November review includes ten Homes.com addresses and three asking prices checked on both sites. Current citywide coverage is unknown.</p>
+    <figure class="deck"><img id="slide" src="slide-1.png" width="1280" height="720" alt="Miami houses on Zillow and Homes.com">
+      <figcaption><div class="controls"><button id="prev" type="button" aria-label="Previous slide" disabled>←</button><span id="counter" aria-live="polite">Slide 1 of 7</span><button id="next" type="button" aria-label="Next slide">→</button></div>
+        <a class="download" href="Miami_Housing_Report.pdf" download>Download the presentation (PDF)</a>
+      </figcaption></figure>
+    <details><summary>Read the slide text</summary><div class="slide-text"><section aria-labelledby="slide-1"><p class="slide-number">Slide 1</p><h2 id="slide-1">Miami houses on Zillow
+and Homes.com</h2>
+<p>1,700 archived Zillow properties<br>8 listing histories and 3 November comparisons</p>
+<p>November 15, 2026</p>
+<p class="sources">Sources</p><ul class="sources">
+<li><a href="https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969">https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969</a></li>
+<li><a href="https://www.homes.com/miami-fl/houses-for-sale/">https://www.homes.com/miami-fl/houses-for-sale/</a></li>
+</ul>
+<details><summary>Speaker notes</summary><p>The 1,700 unique Zillow properties come from three archived March captures. The November research covers eight Homes.com property histories plus three listing pairs reviewed November 15, 2026. One address appears in both sets, for ten distinct Homes.com addresses. Seven of the eight history addresses match the March 6 archive.</p></details>
+</section>
+<section aria-labelledby="slide-2"><p class="slide-number">Slide 2</p><h2 id="slide-2">The March 6 Zillow archive</h2>
+<p>1,696</p>
+<p>unique Zillow property IDs</p>
+<p>Zillow marked all for sale across 41 ZIP codes. The 1,688 positive asking prices had a median of $867,000.</p>
+<div class="data"><table><thead><tr><th scope="col">Records in the March file</th><th scope="col">Count</th></tr></thead><tbody>
+<tr><td>All property rows</td><td>6,575</td></tr>
+<tr><td>Miami single-family houses</td><td>1,696</td></tr>
+<tr><td>In the original sample</td><td>1,000</td></tr>
+</tbody></table></div>
+<p>The archive uses address-city labels. Seven records include a unit marker, and five omit the street address.</p>
+<p class="sources">Sources</p><ul class="sources">
+<li><a href="https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969">https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969</a></li>
+</ul>
+<details><summary>Speaker notes</summary><p>The published miami-fl.json contains records for several municipalities and property types. Counts refer to the March 6 archive. The 1,696 retained unique Zillow property IDs include every property from the prior 1,000-home sample. The expanded archive follows explicit source classifications.
+
+
+
+The published file contains 1,684 without address exception, seven with a unit marker and five with an undisclosed street address. The March median uses the 1,688 positive asking prices. The source city label Miami does not identify the legal city boundary.</p></details>
+</section>
+<section aria-labelledby="slide-3"><p class="slide-number">Slide 3</p><h2 id="slide-3">Four additional properties in later captures</h2>
+<p>The March 10 and 12 files add four Zillow property IDs. Each already carried a recently sold status when the archive captured it.</p>
+<div class="data"><table><thead><tr><th scope="col">Archive capture</th><th scope="col">Property status</th><th scope="col">Unique records</th></tr></thead><tbody>
+<tr><td>March 6, 2026</td><td>For sale</td><td>1,696</td></tr>
+<tr><td>March 10, 2026</td><td>Recently sold</td><td>2</td></tr>
+<tr><td>March 12, 2026</td><td>Recently sold</td><td>2</td></tr>
+</tbody></table></div>
+<p>Across the three dates, the archive documents 1,700 distinct properties. Capture dates record when the archive observed a home.</p>
+<p class="sources">Sources</p><ul class="sources">
+<li><a href="https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969">https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969</a></li>
+</ul>
+<details><summary>Speaker notes</summary><p>The first and last portions of 174 unnamed files were screened, after which 27 candidate files were checked in full. The 27 contained 61,947 total records. Later captures added four distinct properties. Other files received endpoint screening only, and no complete present-day inventory can be inferred.</p></details>
+</section>
+<section aria-labelledby="slide-4"><p class="slide-number">Slide 4</p><h2 id="slide-4">November search pages cover different areas</h2>
+<p>Both portals label their search “Miami.” Homes.com also shows addresses in Hialeah, Coral Gables and Doral.</p>
+<div class="data"><table><thead><tr><th scope="col">Public search page</th><th scope="col">Displayed results</th><th scope="col">Page date</th></tr></thead><tbody>
+<tr><td>Zillow single-family homes</td><td>1,613</td><td>Around Nov 10, 2026¹</td></tr>
+<tr><td>Homes.com houses</td><td>3,895</td><td>Nov 15, 2026</td></tr>
+</tbody></table></div>
+<p>The same home can appear on both sites. Adding these counts would double-count shared listings and mix different search areas.</p>
+<p>¹ Approximate crawl date of the indexed Zillow page.</p>
+<p class="sources">Sources</p><ul class="sources">
+<li><a href="https://www.zillow.com/miami-fl/houses/">https://www.zillow.com/miami-fl/houses/</a></li>
+<li><a href="https://www.homes.com/miami-fl/houses-for-sale/">https://www.homes.com/miami-fl/houses-for-sale/</a></li>
+</ul>
+<details><summary>Speaker notes</summary><p>On November 15 the Zillow indexed page was labeled crawled five days earlier. The visible results heading read 1,613, while the browser title displayed 1,612. The Homes.com search page displayed 3,895. These are page-header observations rather than property exports. Counts and page content can change.</p></details>
+</section>
+<section aria-labelledby="slide-5"><p class="slide-number">Slide 5</p><h2 id="slide-5">Matching eight Homes.com property histories</h2>
+<p>Seven street addresses and ZIP codes matched the March 6 Zillow archive. Six also carried the same MLS listing ID.</p>
+<div class="data"><table><thead><tr><th scope="col">Property</th><th scope="col">What the records show</th></tr></thead><tbody>
+<tr><td>5550 SW 87th Ave</td><td>Same house, new MLS number on September 30.</td></tr>
+<tr><td>6531 SW 20th St</td><td>No March address match. The listing details say West Miami.</td></tr>
+</tbody></table></div>
+<p>Four of the seven matched pages show later sales. These eight selected examples cannot establish the sale rate or total overlap across the two sites.</p>
+<p class="sources">Sources</p><ul class="sources">
+<li><a href="https://www.homes.com/property/5550-sw-87th-ave-miami-fl/87xlj7xnfz8xf/">https://www.homes.com/property/5550-sw-87th-ave-miami-fl/87xlj7xnfz8xf/</a></li>
+<li><a href="https://www.homes.com/property/6531-sw-20th-st-miami-fl/crw0rldeh3jxy/">https://www.homes.com/property/6531-sw-20th-st-miami-fl/crw0rldeh3jxy/</a></li>
+<li><a href="https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969">https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969</a></li>
+</ul>
+<details><summary>Speaker notes</summary><p>Homes.com research was reviewed November 15, 2026. The September listing ID for 5550 SW 87th Ave was A12098257; the earlier one was A11835765. Review dates describe when pages were checked; historical event dates describe transactions or listing changes.</p></details>
+</section>
+<section aria-labelledby="slide-6"><p class="slide-number">Slide 6</p><h2 id="slide-6">What later sale records show</h2>
+<p>For these three Miami addresses, the March 6 Zillow asking price and the subsequent Homes.com sale price describe different events.</p>
+<div class="data"><table><thead><tr><th scope="col">Street address</th><th scope="col">March asking price</th><th scope="col">Later sale price</th><th scope="col">Sale date, 2026</th></tr></thead><tbody>
+<tr><td>15264 SW 102nd Ct</td><td>$600,000</td><td>$560,000</td><td>April 28</td></tr>
+<tr><td>831 NW 21st Ct</td><td>$420,000</td><td>$390,000</td><td>May 5</td></tr>
+<tr><td>701 SW 27th Rd</td><td>$5,000,000</td><td>$3,820,000</td><td>May</td></tr>
+</tbody></table></div>
+<p>Property details can differ, too. At 831 NW 21st Ct, Zillow recorded 2 bathrooms and Homes.com reports 1½.</p>
+<p class="sources">Sources</p><ul class="sources">
+<li><a href="https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969">https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969</a></li>
+<li><a href="https://www.homes.com/property/15264-sw-102nd-ct-miami-fl/4ebz2ljx86swd/">https://www.homes.com/property/15264-sw-102nd-ct-miami-fl/4ebz2ljx86swd/</a></li>
+<li><a href="https://www.homes.com/property/831-nw-21st-ct-miami-fl/5ls6dywp0lprs/">https://www.homes.com/property/831-nw-21st-ct-miami-fl/5ls6dywp0lprs/</a></li>
+<li><a href="https://www.homes.com/property/701-sw-27th-rd-miami-fl/hg1y5vteg7xx8/">https://www.homes.com/property/701-sw-27th-rd-miami-fl/hg1y5vteg7xx8/</a></li>
+</ul>
+<details><summary>Speaker notes</summary><p>The Homes.com links identify the individual properties. Zillow asking prices are from the pinned March 6 file. The 701 SW 27th Rd purchase history reports month precision, so no day is assigned. These examples were deliberately chosen for inspection.</p></details>
+</section>
+<section aria-labelledby="slide-7"><p class="slide-number">Slide 7</p><h2 id="slide-7">Three November listings match on both sites</h2>
+<p>On November 15, the indexed Zillow and Homes.com pages showed the same asking price and MLS number for each of these addresses.</p>
+<div class="data"><table><thead><tr><th scope="col">Miami property</th><th scope="col">Asking price on both sites</th><th scope="col">Shared MLS number</th></tr></thead><tbody>
+<tr><td>1829 NW 62nd Ter</td><td>$425,000</td><td>A12071702</td></tr>
+<tr><td>1861 SW 22nd Ter</td><td>$1,150,000</td><td>A12088401</td></tr>
+<tr><td>5550 SW 87th Ave</td><td>$1,500,000</td><td>A12098257</td></tr>
+</tbody></table></div>
+<p>Zillow showed “For sale” and Homes.com showed “Active.” These are portal observations. Live MLS availability was not independently checked.</p>
+<p>5550 SW 87th Ave also appears in the eight histories, making 10 distinct Homes.com addresses.</p>
+<p class="sources">Sources</p><ul class="sources">
+<li><a href="https://www.zillow.com/homedetails/1829-NW-62nd-Ter-Miami-FL-33147/44158652_zpid/">https://www.zillow.com/homedetails/1829-NW-62nd-Ter-Miami-FL-33147/44158652_zpid/</a></li>
+<li><a href="https://www.homes.com/property/1829-nw-62nd-terrace-miami-fl/4dhg1ecdnhwt9/">https://www.homes.com/property/1829-nw-62nd-terrace-miami-fl/4dhg1ecdnhwt9/</a></li>
+<li><a href="https://www.zillow.com/homedetails/1861-SW-22nd-Ter-Miami-FL-33145/43855601_zpid/">https://www.zillow.com/homedetails/1861-SW-22nd-Ter-Miami-FL-33145/43855601_zpid/</a></li>
+<li><a href="https://www.homes.com/property/1861-sw-22nd-terrace-miami-fl/r6mdp3testy6e/">https://www.homes.com/property/1861-sw-22nd-terrace-miami-fl/r6mdp3testy6e/</a></li>
+<li><a href="https://www.zillow.com/homedetails/5550-SW-87th-Ave-Miami-FL-33165/44205211_zpid/">https://www.zillow.com/homedetails/5550-SW-87th-Ave-Miami-FL-33165/44205211_zpid/</a></li>
+<li><a href="https://www.homes.com/property/5550-sw-87th-ave-miami-fl/87xlj7xnfz8xf/">https://www.homes.com/property/5550-sw-87th-ave-miami-fl/87xlj7xnfz8xf/</a></li>
+</ul>
+<details><summary>Speaker notes</summary><p>The review date is November 15, 2026. The indexed pages had different crawl dates so these checks do not guarantee availability. One house appears in both cohorts, giving ten distinct Homes.com addresses across the eight historical cases and three November comparisons.</p></details>
+</section></div></details>
+  </section>
+  <section id="browse"><h2>Explore the property records</h2>
+    <div class="downloads"><a href="Miami_Housing_Records.xlsx" download><b>Download the spreadsheet</b><span>Property facts, source links and field guide</span></a><a href="Miami_Property_Data.zip" download><b>Download the full data ZIP</b><span>Detailed records, histories, CSVs and source notes</span></a></div>
+    <div class="record-toolbar"><label>Records<select id="dataset"></select></label><label>Find a property<input type="search" id="finder" placeholder="Street address, ZIP, Zillow ID or MLS number"></label></div>
+    <div class="listbar" id="matches" aria-live="polite">Loading property records…</div>
+    <div class="listwrap"><table class="records"><thead><tr><th>Property</th><th>Price</th><th>Source</th></tr></thead><tbody id="properties"></tbody></table></div>
+    <div class="pager"><button id="earlier" type="button">← Previous</button><span id="where"></span><button id="later" type="button">Next →</button></div>
+    <noscript>Download the spreadsheet or data ZIP to read all property records.</noscript>
+  </section>
+  <section id="sources"><h2>Sources</h2><p class="note">The property records come from dated observations. Each capture date and the scope of the Homes.com checks are shown in the presentation.</p><div class="source-list"><a href="https://huggingface.co/datasets/dev0524/resi-dataset/tree/05c08ac6a6afabaf074cd0061164600caa85e969">Source archive</a><a href="https://www.zillow.com/miami-fl/houses/">Zillow Miami house search</a><a href="https://www.homes.com/miami-fl/houses-for-sale/">Homes.com Miami house search</a><a href="../buggy/data/image-sources.csv" download>Property imagery credits (CSV)</a><a href="../march-archive.html">Original 1,000-house archive</a></div></section>
+</main>
+<dialog id="property" class="record-dialog"><div class="modalbar"><span>Property record</span><button id="close-record" type="button">Close ×</button></div><h2 id="address"></h2><dl id="facts"></dl></dialog>
+<script src="browse.js" defer></script>
+<script>
+const titles=["Miami houses on Zillow and Homes.com", "The March 6 Zillow archive", "Four additional properties in later captures", "November search pages cover different areas", "Matching eight Homes.com property histories", "What later sale records show", "Three November listings match on both sites"];
+let index=0;
+const previous=document.getElementById('prev'), next=document.getElementById('next');
+function show(i){
+  index=Math.max(0,Math.min(titles.length-1,i));
+  const slide=document.getElementById('slide');
+  slide.src='slide-'+(index+1)+'.png';slide.alt=titles[index];
+  document.getElementById('counter').textContent='Slide '+(index+1)+' of '+titles.length;
+  previous.disabled=index===0;next.disabled=index===titles.length-1;
+}
+previous.onclick=()=>show(index-1);next.onclick=()=>show(index+1);
+document.querySelector('.deck').addEventListener('keydown',event=>{
+  if(event.altKey||event.ctrlKey||event.metaKey) return;
+  if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
+    event.preventDefault();show(index+(event.key==='ArrowRight'?1:-1));
+  }
+});
+</script>
+</body></html>

@@ -1,5 +1,15 @@
 # Address selection verification
 
+## Client school briefs and agent commands
+
+English and Spanish Playwright runs covered 320, 390, 430 and 1280 CSS pixels in Chromium 149. All eight walks passed. Each searched for a school, selected and removed campuses, shared the results and opened the school-only link in a fresh recipient context. Two additional retry cases recovered from a directory failure. The Coconut Grove example also worked at 320 pixels with 200% text. Both languages produced a one-page Chromium PDF for the two-school example with a directory date, campus sources and the full district locator URL.
+
+The Node agent checks passed 31 CLI invocations, including both real-directory examples. Selectors resolve explicit IDs against the included snapshot. Search and brief output expose school facts; the share link contains the chosen campus IDs and optional language.
+
+Run `python run.py --check` for the eleven repository verification scripts. Real-guardian studies, physical devices and printers remain outside these results.
+
+## Address selection in the original v14 release
+
 The Sites release used for this change was v14 at `1e59168aee46ed867bc988107d922e534384dc50`. The local Sites patch commit is `14f4a5e`. The GitHub import contains the caregiver source subset and has its own commit history.
 
 In v14, the synthetic query `7101 NE Fixture Lane` returned units 2A and 2B. Pressing Enter in the route planner selected 2A. With the patch, Enter leaves both choices on screen. Tapping 2B or highlighting it with the arrow keys and pressing Enter selects 2B. Editing the query also cancels pending selection and highlight actions.

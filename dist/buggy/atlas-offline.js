@@ -1,5 +1,5 @@
 // Only same-origin, public atlas assets are eligible. Family and staff pages never enter this cache.
-const version = 'buggy-atlas-map-v14-20261125';
+const version = 'buggy-atlas-map-brief-20261126';
 const shellCache = version+'-public';
 const photoCache = version+'-photos';
 const base = new URL('./',self.location.href);
@@ -11,6 +11,7 @@ const startup = ['./','./atlas.js','./atlas.css','./explore-modes.js','./school-
   './data-loader.js','./home-rows.js','./map-assets/home-overview.js','./search.js','./county.js','./listing-tour.js','./listing-tour.css','./ride-check.js','./ride-check.css',
   './assets/buggy-logo.png','./map-assets/leaflet.js','./map-assets/leaflet.css','./map-assets/cartography.js','./map-assets/aerial.js','./map-assets/miami.vmap',
   './trip-planner.js','./trip-planner.css','./trip-routing.js','./ride-data.js','./ride-config.js',
+  './client-brief.html','./client-brief.css','./client-brief.js','./school-brief.js','./agent-tools.json',
   './map-assets/road-network.js','./map-assets/route-worker.js','./map-assets/miami-drive.rnet','./map-assets/miami-aerial-overview.webp',
   './data/gallery-homes.json','./data/index.json.gz','./data/search-places.json.gz','./data/coverage.json','./data/property-aliases.json','./data/media.json.gz','./data/schools.json.gz'];
 const initialPaths=new Set(startup.map(p=>new URL(p,base).pathname));
@@ -34,7 +35,7 @@ self.addEventListener('install',event=>{
       const url=here(path);
       const mutable=/\.(?:js|css)$/.test(path);
       const resource=await fetch(url,{cache:mutable?'reload':'force-cache'});
-      if(resource.ok && (!resource.headers.get('content-type')?.includes('text/html')))await cache.put(url,resource);
+      if(resource.ok && (path==='./client-brief.html' || !resource.headers.get('content-type')?.includes('text/html')))await cache.put(url,resource);
     }));
     await self.skipWaiting();
   })());
@@ -48,7 +49,7 @@ self.addEventListener('fetch',event=>{
   if(request.method!=='GET'||url.origin!==base.origin)return;
   const chosen=assetCache(url.pathname);if(!chosen)return;
   const isNavigation=request.mode==='navigate';
-  if(isNavigation && url.pathname!==base.pathname)return;
+  if(isNavigation && url.pathname!==base.pathname && url.pathname!==base.pathname+'client-brief.html')return;
   const key=new URL(url.pathname,base).href;
   event.respondWith((async()=>{
     const cache=await caches.open(chosen);

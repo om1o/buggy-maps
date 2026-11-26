@@ -6,6 +6,7 @@ Skip to content|Saltar al contenido
 Property Atlas|Atlas de propiedades
 Buggy property atlas home|Inicio del atlas de propiedades de Buggy
 Main navigation|Navegación principal
+AI agent tools|Herramientas para agentes de IA
 Explore map|Explorar el mapa
 Photo galleries|Galerías de fotos
 Data & downloads|Datos y descargas
@@ -39,6 +40,8 @@ Tap a cluster to zoom in, then choose a home.|Toca un grupo para acercarte y eli
 About the collection|Acerca de la colección
 searchable property records|registros de propiedades disponibles
 School spreadsheet|Hoja de cálculo de escuelas
+Map source snapshots|Datos de origen del mapa
+County records, neighborhood matches and verification files|Registros del condado, barrios asociados y archivos de verificación
 Schools, grades, contacts, photos and map links|Escuelas, grados, contactos, fotos y enlaces al mapa
 Search this area|Buscar en esta zona
 Clear map area|Quitar zona del mapa
