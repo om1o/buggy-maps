@@ -1,5 +1,24 @@
 # Address selection verification
 
+## Current home facts, November 26, 2026
+
+The published `check_home_facts` tool passed **18 anonymous production checks** on the November 26 deployment. Eleven requests covered a returned home ID, street addresses, embedded ZIPs, an exact apartment, missing or nonexistent units, a wrong ZIP and two complete addresses placed in the ID field by an AI client. Seven incomplete or conflicting requests were rejected. The official MCP SDK separately discovered and called all six public tools. [Public endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp)
+
+For **5550 SW 87th Ave, 33165**, the county's September 21, 2026 attendance layers returned Blue Lakes K-8 Center (elementary band), Glades Middle and Southwest Miami Senior High for the 2026–27 school year. A separate county GIS service returned the same school IDs. A matched zone still returned `enrollmentStatus: "unverified"`. [Elementary record](https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/ElementaryAttendanceBoundary_gdb/FeatureServer/0/71) · [Middle record](https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/MiddleAttendanceBoundary_gdb/FeatureServer/0/20) · [High record](https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/HighAttendanceBoundary_gdb/FeatureServer/0/20)
+
+At **1800 SW 3rd St, 33135**, apartment B matched Shenandoah Elementary, Shenandoah Middle and Miami Senior High. Omitting the unit or entering a nonexistent unit returned three unverified bands. Each production test returned a null current asking price and sale status with reason `provider_not_configured`. No licensed live MLS feed was connected. Positive listing tests used simulated Bridge responses covering an exact relisting, display permission, price, record update time and request time.
+
+A signed-out local Qwen3-0.6B client received all six tool descriptions from production and chose `check_home_facts` on its first call for all three prompts. It needed no model-provider account, map account, GitHub account or checkout of the server. The home-ID answer correctly identified the three schools, the September 21 edition date, school year and unverified enrollment, sale status and price. The street-address answer named the same schools but called the November 26 request date the source date. The ambiguous-building answer supplied no price or schools but added unsupported remarks about the seller and district. Cite the evidence link and `sourceDate` on each matched band, and use the listing field's own update date when available. [Signed-out test results](docs/qa/current-home-facts-2026-11-26.json)
+
+On the published connection page, fresh Chromium sessions exercised the English card at 390 pixels and the Spanish card at 1200 pixels. Each showed two unverified listing fields, three dated county school records and the official enrollment locator with no browser errors. Local browser fixtures also exercised keyboard interaction, retries and layouts at 320 and 430 pixels. The production JavaScript, tool catalog and discovery text matched the public GitHub files byte for byte. [Live connection page](https://miami-homes-march-2026.aoraboracora.chatgpt.site/buggy/agent-connect)
+
+Reproduce the signed-out protocol and 2026–27 address checks from a checkout with Node.js 24.
+
+```sh
+npm ci --prefix integrations/mcp
+node integrations/mcp/verify-http.mjs https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp --zones-2026
+```
+
 ## Home and nearby-school MCP acceptance, November 26, 2026
 
 The public endpoint passed anonymous tests for exact ZIP matching, inclusive price bounds, pagination, unknown and duplicate IDs, and comparison of two homes in the requested order. The asking-price snapshot contains 1,661 homes in 39 ZIP codes. A full local pass paginated every home exactly once and compared its five closest physical campuses against the published directory. Three campuses had no published grade range and retained their empty source value.
