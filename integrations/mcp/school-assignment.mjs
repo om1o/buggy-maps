@@ -11,7 +11,7 @@ const layers = [
   {band: 'middle', layer: 'Middle', edition: 1790032943531},
   {band: 'high', layer: 'High', edition: 1790021587044}
 ];
-const terms = 'Miami-Dade County provides these approximate attendance boundaries for reference. Confirm enrollment, grade-specific exceptions and school choice with Miami-Dade County Public Schools.';
+const terms = 'Enrollment is unverified. These county attendance zones identify schools serving the address. Only Miami-Dade County Public Schools can confirm student enrollment, grade exceptions and school choice.';
 const streetWords = {STREET: 'ST', AVENUE: 'AVE', ROAD: 'RD', DRIVE: 'DR', COURT: 'CT', LANE: 'LN',
   TERRACE: 'TER', PLACE: 'PL', CIRCLE: 'CIR', BOULEVARD: 'BLVD', WAY: 'WAY', PARKWAY: 'PKWY',
   NORTH: 'N', SOUTH: 'S', EAST: 'E', WEST: 'W', NORTHEAST: 'NE', NORTHWEST: 'NW', SOUTHEAST: 'SE', SOUTHWEST: 'SW'};
@@ -155,7 +155,7 @@ export async function checkSchoolAssignment(home, {fetchImpl = fetch, now = new 
   const parts = addressParts(home);
   const result = {homeId: home.id ?? null, address: parts.displayAddress, zip: home.zip, checkedAt,
     status: 'unverified', schoolYear: null, addressStatus: 'unverified', addressSourceUrl: parts.unit ? unitPoints : addresses,
-    districtLocator: districtSchoolLocator, notice: terms, bands: []};
+    districtLocator: districtSchoolLocator, bands: [], enrollmentStatus: 'unverified', notice: terms};
   const signal = AbortSignal.timeout(11000);
   let point;
   try { point = await countyAddress(home, parts, fetchImpl, signal); }

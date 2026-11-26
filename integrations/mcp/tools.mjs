@@ -57,7 +57,7 @@ export function schoolServerFactory(descriptor, loadSnapshot, listingConfig = {}
       return response(buildSchoolBrief(schoolIds, directory, language));
     });
     server.registerTool('search_homes', {
-      description: 'Find homes by five-digit ZIP and/or inclusive archived asking-price bounds in USD, ordered by price then ID. Pass a returned ID to check_home_facts for current listing facts and attendance zones or compare_nearby_schools for distances.',
+      description: 'Search the archive when someone wants a list of homes by ZIP or historical asking-price range. For a particular street address or home ID, call check_home_facts directly to check current sale status, asking price and school zones.',
       inputSchema: z.strictObject({
         zip: z.string().regex(/^\d{5}$/).optional(),
         minPrice: z.number().nonnegative().optional(), maxPrice: z.number().nonnegative().optional(),
@@ -80,7 +80,7 @@ export function schoolServerFactory(descriptor, loadSnapshot, listingConfig = {}
       return response(compareNearbySchools(propertySnapshot.homes, directory.all, args));
     });
     server.registerTool('check_home_facts', {
-      description: 'Check whether a Miami-Dade home is listed for sale, its current asking price in USD, and its zoned public schools by grade band. Supply a homeId OR a street address including unit and a five-digit ZIP. Report each field with its source and date, or say unverified. County attendance zones describe geographic assignment. Confirm enrollment with the district.',
+      description: 'Look up one Miami-Dade street address and ZIP directly, or one homeId. Use this for “still for sale”, current asking price and assigned elementary, middle and high schools. Include any unit. Report each fact with its source and date or say unverified. Report enrollmentStatus independently of school zone matches.',
       inputSchema: homeFactsInput, outputSchema: homeFactsOutput, annotations: {...readOnly, openWorldHint: true}
     }, async args => response(await checkHomeFacts(propertySnapshot.homes, args, {listingConfig})));
     return server;

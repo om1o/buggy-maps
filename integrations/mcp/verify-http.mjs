@@ -61,6 +61,7 @@ try {
   const facts = await call('check_home_facts', {address: '0 Test St', zip: '00000'});
   assert.equal(facts.home.id, null);
   assert.equal(facts.schoolAssignment.status, 'unverified');
+  assert.equal(facts.schoolAssignment.enrollmentStatus, 'unverified');
   assert.equal(facts.schoolAssignment.bands.length, 3);
   assert.ok(facts.schoolAssignment.bands.every(b => b.schoolName === null && b.reason && b.sourceUrl));
   assert.equal(facts.listing.askingPriceUsd.verification, 'unverified');

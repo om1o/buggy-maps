@@ -49,7 +49,8 @@ test('exact address and ZIP use the county point and return dated, grade-banded 
   assert.equal(result.checkedAt, now.toISOString());
   assert.equal(result.homeId, null);
   assert.equal(result.schoolYear, '2026-2027');
-  assert.match(result.notice, /Confirm enrollment/);
+  assert.equal(result.enrollmentStatus, 'unverified');
+  assert.match(result.notice, /Only Miami-Dade County Public Schools can confirm student enrollment/);
   assert.equal(calls.length, 7);
   assert.equal(calls[0].searchParams.get('where'), 'HSE_NUM=123 AND ZIP=33133');
   assert.deepEqual(result.bands.map(b => b.band), ['elementary', 'middle', 'high']);

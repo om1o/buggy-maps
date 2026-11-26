@@ -270,8 +270,8 @@ function renderCheck(home, result) {
     item.append(sourceLink(t('County boundary source', 'Fuente del condado'), band.evidenceUrl || band.sourceUrl));
     list.append(item);
   }
-  content.append(list, element('p', t('County boundaries are approximate. Confirm enrollment, grade exceptions and school choice with the district.',
-    'Los límites del condado son aproximados. Confirma con el distrito la matrícula, las excepciones por grado y la elección de escuela.')),
+  content.append(list, element('p', t('Enrollment is unverified. Confirm placement and any exceptions with Miami-Dade County Public Schools.',
+    'La matrícula está sin verificar. Confirma la asignación y cualquier excepción con las Escuelas Públicas del Condado de Miami-Dade.')),
     sourceLink(t('District attendance locator', 'Buscador de zonas escolares del distrito'), district.districtLocator));
   return content;
 }
