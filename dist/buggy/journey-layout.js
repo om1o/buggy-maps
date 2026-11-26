@@ -72,6 +72,7 @@ function setupJourneyLayout() {
         node.textContent = copy[node.dataset.journeyKey];
       }
       document.getElementById('journey-agent-brief').href='./client-brief.html'+(locale==='es'?'?lang=es':'');
+      document.getElementById('map-agent-connect').href='./agent-connect.html?lang='+locale;
       // The map-area controller may replace the button contents with its own
       // label after a filter is selected; preserve its state and event handlers.
       const searchArea = document.getElementById('search-area');

@@ -126,6 +126,7 @@ function localize() {
   document.title=words.title+' | Buggy Maps';
   for (const node of document.querySelectorAll('[data-i18n]')) node.textContent=words[node.dataset.i18n];
   field('back').href=language==='es'?'./?lang=es':'./';
+  field('tools').href='./agent-connect.html?lang='+language;
   field('locator').href=districtSchoolLocator;
   const toggle=field('language');
   toggle.textContent=language==='en'?'Español':'English';
