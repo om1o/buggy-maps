@@ -1,5 +1,11 @@
 # Address selection verification
 
+## Miami MLS connection check, November 26, 2026
+
+The live MCP (Edge Function version 7) returned `provider_not_configured` for **3039 Orange St, Unit B, Coconut Grove, FL 33133**. Compass identifies the property as Miami MLS **A12113130**. No MLS record, asking price or source modification date reached the MCP. The strict positive acceptance check failed as intended. [Listing brokerage's page](https://www.compass.com/homedetails/3039-Orange-St-Unit-B-Coconut-Grove-FL-33133/1CNGZW_pid/) · [Signed-out AI transcript and raw listing fields](docs/qa/miami-mls-feed-2026-11-26.json)
+
+A local Qwen3-0.6B client initially constructed an unknown home ID. Given the explicit street and ZIP fields, it called the published tool with the correct address and reported both fields unverified. Its answer opened with “The verified MLS record” and later acknowledged that no complete MLS record was obtained. The structured response establishes that no provider check occurred. Seven simulated adapter tests passed, including a positive quote with a source and update date and a check that a combined-feed token cannot fall back to private records. [Feed activation and positive verification](docs/AI-AGENTS.md#connect-and-verify-the-licensed-miami-feed)
+
 ## Current home facts, November 26, 2026
 
 The published `check_home_facts` tool passed **18 anonymous production checks** on the November 26 deployment. Eleven requests covered a returned home ID, street addresses, embedded ZIPs, an exact apartment, missing or nonexistent units, a wrong ZIP and two complete addresses placed in the ID field by an AI client. Seven incomplete or conflicting requests were rejected. The official MCP SDK separately discovered and called all six public tools. [Public endpoint](https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp)

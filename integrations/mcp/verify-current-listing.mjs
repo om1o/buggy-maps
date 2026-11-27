@@ -24,9 +24,10 @@ function unknown(result, reason) {
   }
 }
 
-test('exact relisting observed through the fixed Bridge API, with independent source and retrieval dates', async () => {
+test('exact relisting and source links use the Bridge IDX feed, with independent source and retrieval dates', async () => {
+  const idx = 'https://api.bridgedataoutput.com/api/v2/OData/miamire/idx/Properties';
   const result = await checkCurrentListing(home, options((url, init) => {
-    assert.equal(url.origin + url.pathname, 'https://api.bridgedataoutput.com/api/v2/OData/miamire/Property');
+    assert.equal(url.origin + url.pathname, idx);
     assert.match(url.searchParams.get('$filter'), /StreetNumber eq '42' and PostalCode eq '33133'/);
     assert.ok(!url.href.includes(home.mls));
     assert.ok(!url.href.includes('private-example'));
@@ -43,10 +44,25 @@ test('exact relisting observed through the fixed Bridge API, with independent so
     assert.equal(field.verification, 'verified');
     assert.equal(field.checkedAt, now.toISOString());
     assert.equal(field.sourceUpdatedAt, '2026-11-24T12:00:00.000Z');
-    assert.equal(new URL(field.sourceUrl).searchParams.get('$filter'), "ListingId eq 'RELISTED-42'");
+    const source = new URL(field.sourceUrl);
+    assert.equal(source.origin + source.pathname, idx);
+    assert.equal(source.searchParams.get('$filter'), "ListingId eq 'RELISTED-42'");
   }
   assert.ok(!JSON.stringify(result).includes('private-example'));
   assert.equal((await check([record], {address: home.address, zip: home.zip})).saleStatus.value, 'Active');
+});
+
+test('a combined grant cannot supply a non-IDX listing when IDX is empty or access is denied', async () => {
+  for (const status of [200, 403]) {
+    const paths = [];
+    const result = await checkCurrentListing(home, options(url => {
+      paths.push(url.pathname);
+      if (url.pathname.endsWith('/idx/Properties')) return Response.json({value: []}, {status});
+      return Response.json({value: [record]});
+    }));
+    unknown(result, status === 200 ? 'no_exact_current_listing' : 'provider_unavailable');
+    assert.deepEqual(paths, ['/api/v2/OData/miamire/idx/Properties']);
+  }
 });
 
 test('home, ZIP and unit must match; multiple exact matches are ambiguous', async () => {

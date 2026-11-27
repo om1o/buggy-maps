@@ -43,6 +43,16 @@ An operator with a Miami MLS agreement permitting public display via this servic
 
 For school assignment, report each matched band's school, grades, school year, source date and county feature link. For other bands report unverified and the supplied reason. Read the separate `enrollmentStatus` field even when every zone matches. Only the district can confirm student enrollment. The service checks a county address against three reviewed 2026–27 attendance layers and withholds ambiguous or near-boundary results. A district placement decision can depend on grade, exceptions and program choice. Confirm placement with Miami-Dade County Public Schools. [County address points](https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/GeoAddress_gdb/FeatureServer/0) · [County boundary revision history](https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/ElementaryAttendanceBoundary_gdb/FeatureServer/0/metadata) · [District locator](https://app.guidek12.com/miami/school_search/current/)
 
+### Connect and verify the licensed Miami feed
+
+1. The designated broker and operator use MIAMI Gateway → Bridge to obtain an agreement and MIAMI dataset approval for the Buggy Maps application. Describe the public, anonymous MCP delivery of status, price, source and dates to independent AI clients. Confirm that this use is covered by the grant. [MIAMI member instructions](https://www.miamirealtors.com/wp-content/uploads/bsk-pdf-manager/2022/04/MIAMI-REALTORS-and-Bridge-API-Member-Instructions.pdf) · [MIAMI MLS rules](https://www.miamirealtors.com/bskpdf/mls-rules-and-regulations/)
+2. In the project's Edge Function Secrets, set `BUGGY_BRIDGE_DATASET` to `miamire` and `BUGGY_BRIDGE_SERVER_TOKEN` to the approved application's server token. Supabase makes updated secrets available to the function. The public MCP reads only Bridge's IDX collection, including when the token grants additional feeds. Keep the token on the server. [Buggy Maps secrets dashboard](https://supabase.com/dashboard/project/wzykustudmsjbxugkrzu/functions/secrets) · [Supabase secrets](https://supabase.com/docs/guides/functions/secrets) · [Bridge feed documentation](https://bridgedataoutput.com/docs/explore)
+3. Choose an active, public-display residential listing in the approved feed. Run the command below with its exact address, ZIP and MLS ID. Optionally append its independently observed asking price in USD. An unverified field fails this check. On success, it prints the asking price, status, source URL, modification date and check time.
+
+```sh
+node integrations/mcp/verify-http.mjs https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp --active-listing "STREET AND UNIT" ZIP MLS_ID
+```
+
 ## Run the MCP server locally
 
 Install Node.js 24, then run the following from a terminal.

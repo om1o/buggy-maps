@@ -41,7 +41,8 @@ export async function checkCurrentListing(home, {dataset, token, fetchImpl = fet
   if (dataset !== 'miamire' || typeof token !== 'string' || !token.trim()) return unknown('provider_not_configured');
   const number = typeof home?.address === 'string' && home.address.trim().match(/^(\d+[A-Za-z]?(?:[-/]\d+[A-Za-z]?)?)\s/);
   if (!number || typeof home.zip !== 'string' || !/^\d{5}$/.test(home.zip) || (home.state && home.state !== 'FL')) return unknown('unsupported_address');
-  const endpoint = 'https://api.bridgedataoutput.com/api/v2/OData/' + dataset + '/Property';
+  // Scope both lookup and evidence to IDX even when Bridge grants this token several feeds.
+  const endpoint = 'https://api.bridgedataoutput.com/api/v2/OData/' + dataset + '/idx/Properties';
   const url = new URL(endpoint);
   // The street number + ZIP search includes relistings under a different MLS ID.
   const statuses = currentStatuses.map(status => "StandardStatus eq '" + status + "'").join(' or ');

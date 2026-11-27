@@ -1,0 +1,63 @@
+{
+  "runAt": "2026-11-27T00:17:56.688Z",
+  "edgeFunctionVersion": 7,
+  "endpoint": "https://wzykustudmsjbxugkrzu.supabase.co/functions/v1/buggy-maps-mcp",
+  "model": "Qwen3-0.6B-Q5_K_M.gguf",
+  "runtime": "llama.cpp b12780 CPU",
+  "authentication": "Signed out, offline inference. The MCP client omitted Authorization, Cookie and API key headers.",
+  "candidate": {
+    "address": "3039 Orange St Unit B",
+    "zip": "33133",
+    "publicListingId": "A12113130",
+    "advertisingBrokeragePage": "https://www.compass.com/homedetails/3039-Orange-St-Unit-B-Coconut-Grove-FL-33133/1CNGZW_pid/"
+  },
+  "initialAttempt": {
+    "prompt": "Use check_home_facts to verify the current sale status and asking price for 3039 Orange St Unit B in ZIP 33133. Report the MLS record source and modification date if verified; otherwise say which facts are unverified, and why.",
+    "calls": [
+      {
+        "name": "check_home_facts",
+        "arguments": {
+          "homeId": "3039-Orange-St-B"
+        },
+        "result": [
+          {
+            "type": "text",
+            "text": "Unknown home ID. Choose an ID from search_homes or supply the street address and ZIP."
+          }
+        ]
+      }
+    ]
+  },
+  "explicitAddressAttempt": {
+    "prompt": "Call check_home_facts using the following street address and ZIP as the two tool arguments: {\"address\":\"3039 Orange St Unit B\",\"zip\":\"33133\"}. What does the verified MLS record say about current sale status, asking price, and the source modification date? If no MLS record was obtained, describe the result.",
+    "tool": "check_home_facts",
+    "arguments": {
+      "address": "3039 Orange St Unit B",
+      "zip": "33133"
+    },
+    "listingResult": {
+      "provider": "MIAMI MLS via Bridge",
+      "publicSearchUrl": "https://www.sfpropertysearch.com/en",
+      "listingId": null,
+      "listingOffice": null,
+      "saleStatus": {
+        "verification": "unverified",
+        "value": null,
+        "reason": "provider_not_configured",
+        "sourceUrl": null,
+        "sourceUpdatedAt": null,
+        "checkedAt": null
+      },
+      "askingPriceUsd": {
+        "verification": "unverified",
+        "value": null,
+        "reason": "provider_not_configured",
+        "sourceUrl": null,
+        "sourceUpdatedAt": null,
+        "checkedAt": null
+      }
+    },
+    "answer": "The verified MLS record for the home at 3039 Orange St Unit B, ZIP 33133, does not provide current sale status, asking price, or source modification date. The provided data includes unverified information, such as the sale status being \"unverified,\" and the asking price being \"unverified.\" No complete MLS record was obtained."
+  },
+  "positiveAcceptance": "Failed: provider_not_configured. The MCP received no MLS record or source date. The broker page identified the test subject only."
+}

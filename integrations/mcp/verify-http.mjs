@@ -26,6 +26,26 @@ try {
     assert.ok(!result.isError, JSON.stringify(result.content));
     return result.structuredContent;
   }
+  if (process.argv[3] === '--active-listing') {
+    const [address, zip, listingId, expectedPrice] = process.argv.slice(4);
+    assert.ok(address && /^\d{5}$/.test(zip) && /^[A-Za-z0-9_-]+$/.test(listingId ?? '') &&
+      (expectedPrice === undefined || Number.isFinite(Number(expectedPrice)) && Number(expectedPrice) > 0),
+    'Supply a street address including any unit, a ZIP, an MLS listing ID, and optionally an independently observed price.');
+    const facts = await call('check_home_facts', {address, zip});
+    const {saleStatus, askingPriceUsd} = facts.listing;
+    for (const fact of [saleStatus, askingPriceUsd]) {
+      assert.equal(fact.verification, 'verified', 'Live listing verification failed: ' + fact.reason);
+      assert.ok(Number.isFinite(Date.parse(fact.sourceUpdatedAt)) && Number.isFinite(Date.parse(fact.checkedAt)));
+      assert.ok(Date.parse(fact.sourceUpdatedAt) <= Date.parse(fact.checkedAt));
+      const source = new URL(fact.sourceUrl);
+      assert.equal(source.origin + source.pathname, 'https://api.bridgedataoutput.com/api/v2/OData/miamire/idx/Properties');
+      assert.equal(source.searchParams.get('$filter'), "ListingId eq '" + listingId + "'");
+    }
+    assert.deepEqual([facts.home.address, facts.home.zip, facts.listing.listingId, saleStatus.value], [address, zip, listingId, 'Active']);
+    assert.ok(Number.isFinite(askingPriceUsd.value) && askingPriceUsd.value > 0);
+    if (expectedPrice !== undefined) assert.equal(askingPriceUsd.value, Number(expectedPrice));
+    console.log(JSON.stringify({listingId, saleStatus, askingPriceUsd}, null, 2));
+  }
   const {datasets} = await call('list_map_datasets', {});
   assert.deepEqual(datasets.map(item => item.name).sort(), Object.keys(descriptor['x-web'].dataDownloadsRelativeToDescriptor).sort());
   const {schools} = await call('search_schools', {query: 'Coconut Grove Elementary', limit: 3});
